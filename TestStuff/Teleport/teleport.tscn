@@ -1,0 +1,132 @@
+[gd_scene load_steps=12 format=3 uid="uid://dtv3quspw7bwn"]
+
+[sub_resource type="GDScript" id="GDScript_f2en7"]
+script/source = "extends Marker3D
+
+var Teleport_Point : Vector3
+var reset_point : Vector3
+@export var player : Node3D
+
+func _ready():
+	Teleport_Point = global_position
+	reset_point = global_position
+
+func _physics_process(delta):
+	if Input.is_key_pressed(KEY_Q):
+		move_teleport(player.global_position)
+	if Input.is_key_pressed(KEY_E):
+		begin_teleport(Teleport_Point)
+	if  Input.is_key_pressed(KEY_T):
+		move_teleport(reset_point)
+
+func move_teleport(_position : Vector3):
+	var tween = create_tween()
+	var time : float = _position.distance_to(global_position) / 100
+	time = clamp(time, 0, 1000)
+	tween.tween_property(self, \"global_position\", _position, time)
+	tween.play()
+	await tween.finished
+	tween.kill()
+	Teleport_Point = global_position
+	
+
+func begin_teleport(_position : Vector3):
+	var tween = create_tween()
+	var time : float = _position.distance_to(player.global_position) / 100
+	time = clamp(time, 0, 1000)
+	tween.tween_property(player, \"global_position\", _position, time)
+	tween.play()
+	await tween.finished
+	tween.kill()
+"
+
+[sub_resource type="Curve" id="Curve_vkkoi"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.502688, 1), 4.91321, 4.91321, 0, 0, Vector2(0.508065, 1), -6.41725, -6.41725, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Gradient" id="Gradient_0x4k1"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sy4u5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dqx8f"]
+seamless = true
+color_ramp = SubResource("Gradient_0x4k1")
+noise = SubResource("FastNoiseLite_sy4u5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iveda"]
+transparency = 1
+blend_mode = 1
+albedo_color = Color(0.611765, 0.827451, 0.945098, 0.227451)
+emission_enabled = true
+emission = Color(0.203328, 0.506313, 0.794717, 1)
+emission_operator = 1
+normal_enabled = true
+normal_scale = -0.88
+normal_texture = SubResource("NoiseTexture2D_dqx8f")
+ao_enabled = true
+refraction_scale = -0.09
+billboard_mode = 2
+billboard_keep_scale = true
+grow_amount = -0.941
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_qp3ma"]
+material = SubResource("StandardMaterial3D_iveda")
+sections = 11
+curve = SubResource("Curve_vkkoi")
+
+[sub_resource type="Curve" id="Curve_7b7ww"]
+min_value = -360.0
+max_value = 360.0
+_data = [Vector2(0.00717703, -205.132), 0.0, 0.0, 0, 0, Vector2(0.337321, 175.245), 0.0, 0.0, 0, 0, Vector2(0.705742, -150.792), 0.0, 0.0, 0, 0, Vector2(0.997608, 153.509), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_hghcd"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.270335, -101.887), 0.0, 0.0, 0, 0, Vector2(0.834928, 91.3208), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_2q6ne"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.919271, 0.909434), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_m4kio"]
+min_value = -1.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.351675, -0.0867925), 0.0, 0.0, 0, 0, Vector2(0.782297, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[node name="Teleport" type="Marker3D"]
+transform = Transform3D(-0.740594, 0, 0.671954, 0, 1, 0, -0.671954, 0, -0.740594, 0, 0, 0)
+script = SubResource("GDScript_f2en7")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+transform = Transform3D(-0.740593, 0, -0.671953, 0, 1, 0, 0.671953, 0, -0.740593, 0, 0.799255, 0)
+amount = 12
+lifetime = 0.7
+mesh = SubResource("RibbonTrailMesh_qp3ma")
+direction = Vector3(0, -1, 0)
+spread = 25.0
+gravity = Vector3(0, 15, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 4.0
+angular_velocity_min = -76.46
+angular_velocity_max = 63.72
+angular_velocity_curve = SubResource("Curve_7b7ww")
+radial_accel_min = -0.01
+radial_accel_max = 0.01
+radial_accel_curve = SubResource("Curve_hghcd")
+damping_min = 0.01
+damping_max = 1.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_2q6ne")
+hue_variation_min = -0.73
+hue_variation_max = 0.5
+hue_variation_curve = SubResource("Curve_m4kio")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CPUParticles3D"]
+light_color = Color(0.156863, 0.580392, 1, 1)
+light_energy = 6.097
+light_indirect_energy = 0.858
+shadow_enabled = true
+distance_fade_enabled = true

@@ -5,16 +5,17 @@ var i : float = 0
 var speed : float
 
 func on_enter():
-	player.additional_speed += 0
-	player.acceleration = 30
-	speed = player.additional_speed
+	player.stats.additional_speed += 0
+	player.stats.acceleration = 30
+	speed = player.stats.additional_speed #+ player.stats.speed
 	i = 0
 
 func on_physics_process(delta):
-	i += delta / 50
+	i += delta / 10
 	i = clamp(i, 0, 1)
 	var _sample = running_curve.sample(i)
-	player.additional_speed = speed * _sample
+	var _t_speed = speed + (speed * _sample)
+	player.stats.additional_speed = _t_speed
 	
 	handle_movement(delta)
 	handle_no_floor()

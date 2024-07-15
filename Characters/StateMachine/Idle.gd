@@ -3,7 +3,7 @@ extends PlayerState
 
 # Called when the state machine enters this state.
 func on_enter():
-	player.acceleration = 15
+	player.stats.acceleration = 15.0
 	
 
 # Called every physics frame when this state is active.
@@ -14,9 +14,9 @@ func on_physics_process(delta):
 	handle_jump()
 	handle_crouch()
 	
-	player.additional_speed = lerp(player.additional_speed, 0.0, delta)
-	player.velocity.x = lerp(player.velocity.x, 0 * player.speed, player.acceleration * delta)
-	player.velocity.z = lerp(player.velocity.z, 0 * player.speed, player.acceleration * delta)
+	player.stats.additional_speed = lerp(player.stats.additional_speed, 0.0, delta)
+	player.velocity.x = lerp(player.velocity.x, 0 * player.stats.speed, player.stats.acceleration * delta)
+	player.velocity.z = lerp(player.velocity.z, 0 * player.stats.speed, player.stats.acceleration * delta)
 	player.move_and_slide()
 	catch_movement()
 

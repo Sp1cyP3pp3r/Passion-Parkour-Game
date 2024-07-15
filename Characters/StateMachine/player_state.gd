@@ -4,6 +4,7 @@ class_name PlayerState
 @onready var player = get_owner() as Player
 @export var can_jump_in_this_state : bool = true
 @export var can_crouch_in_this_state : bool = true
+@export var effects_list : Array[CreateEffects]
 var snap_margin = 0.01
 
 
@@ -22,9 +23,9 @@ func handle_movement(delta):
 	direction = Vector3(direction.x, 0, direction.y)
 	var _dot = direction.dot(-player.global_transform.basis.z)
 	var _dot_p = _dot * 0.25 + 0.75
-	var total_speed = player.speed + player.additional_speed
-	player.velocity.x = lerp(player.velocity.x, direction.x * total_speed * _dot_p, player.acceleration * delta)
-	player.velocity.z = lerp(player.velocity.z, direction.z * total_speed * _dot_p, player.acceleration * delta)
+	var total_speed = player.stats.speed + player.stats.additional_speed
+	player.velocity.x = lerp(player.velocity.x, direction.x * total_speed * _dot_p, player.stats.acceleration * delta)
+	player.velocity.z = lerp(player.velocity.z, direction.z * total_speed * _dot_p, player.stats.acceleration * delta)
 	if direction.is_equal_approx(Vector3.ZERO) and state_machine.current_state.name == "Run":
 		change_state("Idle")
 	player.move_and_slide()
@@ -63,12 +64,8 @@ func handle_no_floor():
 		change_state("Air")
 
 func handle_fall(delta):
-	player.velocity.y -= player.gravity * delta
+	player.velocity.y -= player.stats.gravity * delta
 
-func handle_landing():
-	if player.legs.is_touching_floor():
-		player.additional_speed -= 2
-		change_state("Run")
 
 func handle_jump():
 	if Input.is_action_just_pressed("jump"):

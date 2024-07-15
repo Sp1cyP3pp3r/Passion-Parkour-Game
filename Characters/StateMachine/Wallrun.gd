@@ -10,10 +10,10 @@ var _do_wallrun = true
 
 # Called when the state machine enters this state.
 func on_enter():
-	player.additional_speed += 0.5
+	player.stats.additional_speed += 0.15
 	i = 0
 	_do_wallrun = true
-	speed = player.speed
+	speed = player.stats.speed
 
 
 # Called every physics frame when this state is active.
@@ -22,13 +22,14 @@ func on_physics_process(delta):
 	i = clamp(i, 0, 1)
 	
 	if _do_wallrun:
+		var _total_speed = player.stats.speed + player.stats.additional_speed
 		player.velocity.x = (-player.body.get_wall_normal() * 1.25 + \
-		player.body.get_wall_forward() * speed).x
+		player.body.get_wall_forward() * _total_speed).x
 		player.velocity.z = (-player.body.get_wall_normal()  * 1.25 + \
-		player.body.get_wall_forward() * speed).z
+		player.body.get_wall_forward() * _total_speed).z
 	
 		var _wall_grav = wall_curve.sample(i)
-		player.velocity.y -= player.gravity * delta
+		player.velocity.y -= player.stats.gravity * delta
 		player.velocity.y -= (player.velocity.y * _wall_grav)
 	
 	camera_tilt(delta)

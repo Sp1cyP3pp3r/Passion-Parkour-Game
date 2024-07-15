@@ -3,8 +3,8 @@ extends PlayerState
 
 # Called when the state machine enters this state.
 func on_enter():
-	player.additional_speed += 0
-	player.acceleration = 0.8
+	player.stats.additional_speed += 0
+	player.stats.acceleration = 0.8
 	if %FiniteStateMachine._previous_state.name == "Run"  or %FiniteStateMachine._previous_state.name == "Idle":
 		can_jump_in_this_state = true
 		$CoyoteTimer.start()
@@ -22,3 +22,10 @@ func on_exit():
 
 func coyote_disable_jump() -> void :
 	can_jump_in_this_state = false
+
+
+func handle_landing():
+	if player.legs.is_touching_floor():
+		#player.stats.additional_speed -= 2
+		effects_list[0].add_effects(player)
+		change_state("Run")

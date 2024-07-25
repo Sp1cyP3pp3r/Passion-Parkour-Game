@@ -1,9 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8ipvqjdlnwt4"]
+[gd_scene load_steps=2 format=3 uid="uid://b8ipvqjdlnwt4"]
 
 [ext_resource type="Script" path="res://Objects/Effects/Effect.gd" id="1_knr6w"]
 
-[sub_resource type="Resource" id="Resource_510fe"]
-
 [node name="Effect" type="Node" groups=["effects"]]
 script = ExtResource("1_knr6w")
-properties_array = [SubResource("Resource_510fe")]

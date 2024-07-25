@@ -26,9 +26,9 @@ func apply_effects(applied_properties : Array[String]) -> void:
 		# Maybe find a better solution
 		var property_name = property.property_name
 		if ( property_name in applied_properties ) or is_apply_all_properties:
-			if property_name in effected_game_object.stats:
+			if property_name in effected_game_object:
 				var final_value : float
-				var enemy_value : float = effected_game_object.stats.get(property_name)
+				var enemy_value : float = effected_game_object.get(property_name)
 				var modificator : float = property.property_modificator
 				
 				print("\n" +  str(property_name))
@@ -44,7 +44,7 @@ func apply_effects(applied_properties : Array[String]) -> void:
 				
 				print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - saved value " + str(property.saved_value))
 				print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - final value " + str(final_value))
-				effected_game_object.stats.set(property_name, final_value)
+				effected_game_object.set(property_name, final_value)
 
 func discard_effects() -> void:
 	if not is_queued_for_deletion():
@@ -55,12 +55,12 @@ func discard_effects() -> void:
 	
 	for property in properties_array:
 		var property_name = property.property_name
-		if property_name in effected_game_object.stats:
-			var enemy_value = effected_game_object.stats.get(property_name)
+		if property_name in effected_game_object:
+			var enemy_value = effected_game_object.get(property_name)
 			print("\n"+str(property_name)+"\n")
 			print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - saved value (discard) " + str(property.saved_value))
 			var final_value : float = enemy_value - property.saved_value
-			effected_game_object.stats.set(property_name, final_value)
+			effected_game_object.set(property_name, final_value)
 			print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - final value (discard) " + str(final_value))
 	var do_reapply : bool = false
 	for effect_child in effected_game_object.get_children():
@@ -78,10 +78,10 @@ func reapply_effects() -> void:
 	for property in properties_array:
 		var reapplied_value : float = 0
 		var property_name : String = property.property_name
-		if property_name in effected_game_object.stats and not property_name in reapplied_properties:
+		if property_name in effected_game_object and not property_name in reapplied_properties:
 			if not property_name in reapplied_properties:
 					reapplied_properties.append(property_name)
-			var enemy_value = effected_game_object.stats.get(property_name)
+			var enemy_value = effected_game_object.get(property_name)
 			for effect in effected_game_object.get_children():
 				if effect is Effect and effect != self:
 					var is_prompted : bool = false
@@ -98,9 +98,9 @@ func reapply_effects() -> void:
 			
 			if reapplied_value != 0:
 				var final_value = enemy_value - reapplied_value
-				effected_game_object.stats.set(property_name, final_value)
+				effected_game_object.set(property_name, final_value)
 				print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - reapplied value " + str(reapplied_value))
-				print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - middle value (reapply) " + str(effected_game_object.stats.get(property_name)))
+				print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - middle value (reapply) " + str(effected_game_object.get(property_name)))
 				
 			
 	if not reapplied_effects.is_empty():
@@ -111,7 +111,7 @@ func reapply_effects() -> void:
 	
 	# DEBUG
 	for property in reapplied_properties:
-		print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - final value (reapply) " + str(effected_game_object.stats.get(property)))
+		print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - final value (reapply) " + str(effected_game_object.get(property)))
 		
 
 

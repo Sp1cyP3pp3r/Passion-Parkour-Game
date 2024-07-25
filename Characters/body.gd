@@ -6,8 +6,6 @@ func is_on_wall() -> bool:
 	wall_shapecast.force_shapecast_update()
 	if wall_shapecast.is_colliding():
 		var _normal = wall_shapecast.get_collision_normal(0)
-		#print(_normal)
-		#print(_normal.dot(Vector3.UP))
 		var _normal_snapped = snapped(_normal.dot(Vector3.UP), 0.001)
 		if _normal_snapped <= 0.25 and _normal_snapped >= -0.19:
 			return true
@@ -16,8 +14,6 @@ func is_on_wall() -> bool:
 
 func get_wall_dot():
 	wall_shapecast.force_shapecast_update()
-	#if owner.legs.is_ray_floor():
-		#return null
 	if wall_shapecast.is_colliding():
 		var _normal = wall_shapecast.get_collision_normal(0)
 		var _rotation = -owner.global_transform.basis.z

@@ -1,34 +1,21 @@
-[gd_scene load_steps=41 format=3 uid="uid://c1n8xrti8afpc"]
+[gd_scene load_steps=36 format=3 uid="uid://c1n8xrti8afpc"]
 
 [ext_resource type="Script" path="res://Characters/player.gd" id="1_oa43o"]
-[ext_resource type="Script" path="res://Objects/Effects/player_stats.gd" id="2_f1j5q"]
 [ext_resource type="Script" path="res://addons/finite_state_machine/scripts/finite_state_machine.gd" id="2_p4q1k"]
 [ext_resource type="Script" path="res://Characters/head.gd" id="3_kj3jh"]
 [ext_resource type="Script" path="res://Characters/body.gd" id="3_kv3lp"]
 [ext_resource type="Script" path="res://Characters/legs.gd" id="3_sof65"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Idle.gd" id="5_6pvtv"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Run.gd" id="6_q5vx6"]
-[ext_resource type="Script" path="res://Objects/Effects/effected_properties.gd" id="7_h8ufm"]
 [ext_resource type="Script" path="res://addons/post_processing/node/post_process.gd" id="7_ntk6x"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Air.gd" id="7_q0tn7"]
-[ext_resource type="Script" path="res://Objects/Effects/create_effects.gd" id="7_yhwqt"]
 [ext_resource type="Resource" uid="uid://bqgmj3h5w62hd" path="res://postpros.tres" id="8_67wo0"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Jump.gd" id="8_856fg"]
+[ext_resource type="Curve" uid="uid://cv4u1kjdyu52w" path="res://Characters/run_curve.tres" id="8_iqy3b"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Crouch.gd" id="9_84rn1"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Slide.gd" id="10_d4xg0"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Wallrun.gd" id="11_5sljj"]
 [ext_resource type="Script" path="res://Characters/StateMachine/UpWallrun.gd" id="13_47a8u"]
-
-[sub_resource type="Resource" id="Resource_5gj03"]
-script = ExtResource("2_f1j5q")
-speed = 8.498
-acceleration = 30.0
-additional_speed = 2.5
-gravity = 15.0
-jump_power = 6.186
-max_hp = 0.0
-damage_resistance = 0.0
-healing_resistance = 0.0
 
 [sub_resource type="Gradient" id="Gradient_5ns4l"]
 
@@ -83,23 +70,6 @@ radius = 0.35
 height = 0.8
 radius = 0.45
 
-[sub_resource type="Curve" id="Curve_5pfiv"]
-_data = [Vector2(0, 0), 0.0, 0.249194, 0, 0, Vector2(0.259524, 0.369811), 3.42641, 3.42641, 0, 0, Vector2(0.454762, 0.833962), 0.85341, 0.85341, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="Resource" id="Resource_e7yob"]
-script = ExtResource("7_h8ufm")
-property_enum = 1
-property_modificator = -50.0
-modificator_mode = 1
-
-[sub_resource type="Resource" id="Resource_in4ji"]
-script = ExtResource("7_yhwqt")
-predesignated_effects = Array[PackedScene]([])
-custom_effects = Array[ExtResource("7_h8ufm")]([SubResource("Resource_e7yob")])
-create_timer = false
-timer_wait_time = 0.0
-
 [sub_resource type="Curve" id="Curve_rnlko"]
 _data = [Vector2(0, 0), 0.0, 0.657192, 0, 0, Vector2(1, 1), 2.52526, 0.0, 0, 0]
 point_count = 2
@@ -122,13 +92,18 @@ font_size = 29
 outline_size = 5
 outline_color = Color(0.0962047, 0.0962048, 0.0962047, 1)
 
+[sub_resource type="SphereMesh" id="SphereMesh_iqohg"]
+radius = 0.1
+height = 0.2
+
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("legs", "head", "body")]
 collision_layer = 2
 script = ExtResource("1_oa43o")
 legs = NodePath("Legs")
 head = NodePath("Head")
 body = NodePath("Body")
-stats = SubResource("Resource_5gj03")
+gravity = 17.0
+jump_power = 6.21
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -151,6 +126,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 script = ExtResource("3_kj3jh")
 
 [node name="Camera" type="Camera3D" parent="Head"]
+current = true
 
 [node name="HeadFreeSpaceCast" type="ShapeCast3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.250672, 0)
@@ -218,12 +194,16 @@ script = ExtResource("5_6pvtv")
 
 [node name="Run" type="Node" parent="FiniteStateMachine"]
 script = ExtResource("6_q5vx6")
-running_curve = SubResource("Curve_5pfiv")
+running_curve = ExtResource("8_iqy3b")
+
+[node name="Timer" type="Timer" parent="FiniteStateMachine/Run"]
+process_callback = 0
+wait_time = 0.1
+autostart = true
 
 [node name="Air" type="Node" parent="FiniteStateMachine"]
 script = ExtResource("7_q0tn7")
 can_jump_in_this_state = false
-effects_list = Array[ExtResource("7_yhwqt")]([SubResource("Resource_in4ji")])
 
 [node name="CoyoteTimer" type="Timer" parent="FiniteStateMachine/Air"]
 process_callback = 0
@@ -304,4 +284,10 @@ text = "NTRCN TRNMCG"
 label_settings = SubResource("LabelSettings_f0lxb")
 horizontal_alignment = 2
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.955958, -0.791345)
+visible = false
+mesh = SubResource("SphereMesh_iqohg")
+
+[connection signal="timeout" from="FiniteStateMachine/Run/Timer" to="FiniteStateMachine/Run" method="update_yaw"]
 [connection signal="timeout" from="FiniteStateMachine/Air/CoyoteTimer" to="FiniteStateMachine/Air" method="coyote_disable_jump"]

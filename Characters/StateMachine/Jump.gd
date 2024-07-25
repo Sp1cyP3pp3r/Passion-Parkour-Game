@@ -3,9 +3,9 @@ extends PlayerState
 
 # Called when the state machine enters this state.
 func on_enter():
-	player.stats.additional_speed += 1.486
-	player.stats.acceleration = 1.2
-	player.velocity.y = player.stats.jump_power * 1.1
+	player.add_speed_ratio += 0.3
+	player.acceleration = 1.2
+	player.velocity.y = player.jump_power * 1.1
 
 
 # Called every physics frame when this state is active.

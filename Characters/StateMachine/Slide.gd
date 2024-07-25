@@ -7,14 +7,15 @@ var to_crouch : bool = false
 
 # Called when the state machine enters this state.
 func on_enter():
-	player.stats.additional_speed += 1
-	player.stats.acceleration = 1
+	player.acceleration = 1
 	if not is_crouching:
 		player.head.head_free_space_cast.target_position.y = 0.9
 		%CrouchCollision.disabled = false
 		%StandCollision.disabled = true
 	tween_camera_crouch()
 	
+	player.speed = 2
+	player.add_speed_ratio += 0.05
 	to_crouch = false
 	is_crouching = false
 	crouch_node.is_crouching = true
@@ -27,7 +28,7 @@ func on_physics_process(delta):
 	handle_no_floor()
 	slopes_and_stairs(delta)
 	handle_uncrouch()
-	if snapped(player.stats.additional_speed, 0.01) <= 0.3:
+	if snapped(player.add_speed_ratio, 0.01) <= 0.0:
 		crouch_node.is_crouching = true
 		to_crouch = true
 		change_state("Crouch")
@@ -42,7 +43,6 @@ func on_exit():
 		crouch_node.is_crouching = false
 		
 		player.head.head_free_space_cast.target_position.y = 0.45
-	player.stats.additional_speed += 1
 	
 
 var _i : float = 0
@@ -50,7 +50,7 @@ var _i : float = 0
 func flow_speed(delta) -> void:
 	_i += delta / 5
 	var _value = 1 - _curve.sample(_i)
-	player.stats.additional_speed = player.stats.additional_speed * _value
+	player.add_speed_ratio = player.add_speed_ratio * _value
 	handle_movement(delta)
 	#player.velocity = player.velocity * _value
 	#player.move_and_slide()

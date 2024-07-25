@@ -10,27 +10,32 @@ var _do_wallrun = true
 
 # Called when the state machine enters this state.
 func on_enter():
-	player.stats.additional_speed += 0.15
+	player.add_speed_ratio += -0.2
+	player.speed = 5
 	i = 0
 	_do_wallrun = true
-	speed = player.stats.speed
+	speed = player.speed
 
 
 # Called every physics frame when this state is active.
 func on_physics_process(delta):
-	i += delta / 1
-	i = clamp(i, 0, 1)
+	i += delta / 1.1
+	player.add_speed_ratio -= delta / 10
 	
 	if _do_wallrun:
-		var _total_speed = player.stats.speed + player.stats.additional_speed
+		var additional_speed = player.speed * accel_curve.sample(player.add_speed_ratio) / 2
+		var _total_speed = player.speed + additional_speed
 		player.velocity.x = (-player.body.get_wall_normal() * 1.25 + \
 		player.body.get_wall_forward() * _total_speed).x
 		player.velocity.z = (-player.body.get_wall_normal()  * 1.25 + \
 		player.body.get_wall_forward() * _total_speed).z
 	
 		var _wall_grav = wall_curve.sample(i)
-		player.velocity.y -= player.stats.gravity * delta
+		player.velocity.y -= player.gravity * delta
 		player.velocity.y -= (player.velocity.y * _wall_grav)
+		
+		if i > 1.5:
+			change_state("Air")
 	
 	camera_tilt(delta)
 	
@@ -56,7 +61,9 @@ func on_exit():
 
 func camera_tilt(delta):
 	var sign_direction = player.body.get_wall_sign_direction()
-	var cam_tilt : float = 10 * -sign_direction
+	var _dot = abs(player.body.get_wall_dot())
+	var cam_tilt : float = 12 * -sign_direction
+	cam_tilt = cam_tilt - (cam_tilt * _dot)
 	player.head.camera.rotation_degrees.z = lerp(player.head.camera.rotation_degrees.z, cam_tilt, delta)
 
 func camera_tween_end():

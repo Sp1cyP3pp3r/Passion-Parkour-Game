@@ -10,9 +10,9 @@ func on_enter():
 		%CrouchCollision.disabled = false
 		%StandCollision.disabled = true
 		tween_camera_crouch()
-	player.stats.additional_speed -= 3
-	player.stats.acceleration = 50
-	
+	player.speed = 2.5
+	player.acceleration = 50
+	player.add_speed_ratio = 0
 	is_crouching = true
 
 

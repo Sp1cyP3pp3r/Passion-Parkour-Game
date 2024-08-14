@@ -31,7 +31,8 @@ func handle_wallrun():
 		var _dot = player.body.get_wall_dot()
 		if _dot:
 			if _dot <= -0.1 and _dot >= -0.85:
-				change_state("Wallrun")
+				if player.body.is_upper_head_colliding(player.body.wall_shapecast.get_collision_point(0)):
+					change_state("Wallrun")
 			# vertical wallrun
 			elif _dot <= -0.85 and _dot >= -1:
 				change_state("UpWallrun")

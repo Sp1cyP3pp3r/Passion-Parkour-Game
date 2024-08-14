@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Passion Parkour Game"
+config/name="Funk Pop Parkour"
 run/main_scene="res://Qodot Maps/Godot Levels from Qodot Maps/testtest.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"

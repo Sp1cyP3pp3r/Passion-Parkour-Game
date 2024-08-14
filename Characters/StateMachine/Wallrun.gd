@@ -7,6 +7,7 @@ var speed : float = 0
 
 # should remove when make real walljump code
 var _do_wallrun = true
+var previous_wall : Vector3 = Vector3.ZERO
 
 # Called when the state machine enters this state.
 func on_enter():
@@ -15,7 +16,11 @@ func on_enter():
 	i = 0
 	_do_wallrun = true
 	speed = player.speed
-
+	player.head.do_rotate_owner = false
+	$Timer.start()
+	$DotTimer.start()
+	previous_wall = player.body.get_wall_normal()
+	_dot = 1
 
 # Called every physics frame when this state is active.
 func on_physics_process(delta):
@@ -34,10 +39,9 @@ func on_physics_process(delta):
 		player.velocity.y -= player.gravity * delta
 		player.velocity.y -= (player.velocity.y * _wall_grav)
 		
-		if i > 1.5:
-			change_state("Air")
+		check_curve(delta)
 	
-	camera_tilt(delta)
+		camera_tilt(delta)
 	
 	player.move_and_slide()
 	
@@ -45,19 +49,24 @@ func on_physics_process(delta):
 		change_state("Idle")
 	
 	if not player.body.is_on_wall():
-		change_state("Air")
+		wallrun_timeout()
 	
 	if Input.is_action_just_pressed("jump"):
 		_do_wallrun = false
-		player.velocity += player.body.get_wall_normal() * 4
+		player.velocity += player.body.get_wall_normal() * 3.25
 		change_state("Jump")
-
-
+	
+	
 
 # Called when the state machine exits this state.
 func on_exit():
 	camera_tween_end() 
-	#player.head.camera.rotation_degrees.z = 0
+	player.global_rotation.y = player.head.camera.global_rotation.y
+	player.head.camera.rotation.y = 0
+	player.head.do_rotate_owner = true
+	
+	$Timer.stop()
+	$DotTimer.stop()
 
 func camera_tilt(delta):
 	var sign_direction = player.body.get_wall_sign_direction()
@@ -65,6 +74,20 @@ func camera_tilt(delta):
 	var cam_tilt : float = 12 * -sign_direction
 	cam_tilt = cam_tilt - (cam_tilt * _dot)
 	player.head.camera.rotation_degrees.z = lerp(player.head.camera.rotation_degrees.z, cam_tilt, delta)
+	
+	var _forward : Vector3 = player.body.get_wall_forward()
+	var look = lerp(player.global_position + -player.global_basis.z, player.global_position + _forward, 10 * delta)
+	player.look_at(look)
+	
+	var _yaw : float = player.head.camera.rotation_degrees.y
+	
+	var min_angle = min(0, 90 * -sign_direction)
+	var max_angle = max(0, 90 * -sign_direction)
+	var _yaw_clamped : float = clamp(_yaw, min_angle, max_angle)
+	_yaw = _yaw_clamped
+	
+	player.head.camera.rotation_degrees.y = _yaw
+
 
 func camera_tween_end():
 	var _tween : Tween = create_tween()
@@ -74,3 +97,22 @@ func camera_tween_end():
 	_tween.play()
 	await _tween.finished
 	_tween.kill()
+
+
+func wallrun_timeout():
+	_do_wallrun = false
+	var _temp_y = player.velocity.y
+	player.velocity = previous_wall * 2 + -player.global_basis.z * player.speed
+	player.velocity.y = _temp_y
+	change_state("Air")
+
+var _dot : float
+func check_curve(delta):
+	if _dot >= 0.69:
+		previous_wall = player.body.get_wall_normal()
+	else:
+		wallrun_timeout()
+
+func update_dot():
+	_dot = previous_wall.dot(player.body.get_wall_normal())
+	%Label5.text = str(_dot)

@@ -25,8 +25,7 @@ func coyote_disable_jump() -> void :
 
 func handle_landing():
 	if not player.legs.is_touching_floor():
-		_power = abs(player.velocity.y / 15)
-		#_power = max(0.32, _power)
+		_power = abs(player.velocity.y / 18)
 	else:
 		player.add_speed_ratio -= _power
 		change_state("Run")

@@ -1,0 +1,185 @@
+[gd_scene load_steps=10 format=3 uid="uid://u7wh0po5thv4"]
+
+[ext_resource type="AudioStream" uid="uid://c2x1l4jlvhcpj" path="res://TestStuff/Letters/hum.ogg" id="1_sbie3"]
+[ext_resource type="AudioStream" uid="uid://0apbhxqy582s" path="res://TestStuff/Letters/bam.ogg" id="2_y73wj"]
+
+[sub_resource type="GDScript" id="GDScript_t34np"]
+script/source = "extends Area3D
+
+var entered : bool = false
+
+func _on_body_entered(body):
+	if not entered:
+		if body is Player:
+			entered = true
+			body.debug_letters += 1
+			$AudioStreamPlayer3D2.play()
+			$AnimationPlayer.play(\"picked up\")
+			await $AnimationPlayer.animation_finished
+			$CSGCombiner3D.queue_free()
+			$OmniLight3D.queue_free()
+			$AudioStreamPlayer3D.queue_free()
+			await $AudioStreamPlayer3D2.finished
+			queue_free()
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jwt40"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(2.21401e-06, 0.664044, 0.730404, 1)
+disable_receive_shadows = true
+grow = true
+grow_amount = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jqowg"]
+radius = 1.3619
+
+[sub_resource type="Animation" id="Animation_dsgun"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCombiner3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_xtirn"]
+resource_name = "letter_rotating"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCombiner3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CSGCombiner3D:material_override:grow_amount")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.78127),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.2, 0.001, 0.1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer3D:volume_db")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-5.0, -6.0, -4.5]
+}
+
+[sub_resource type="Animation" id="Animation_0lnsd"]
+resource_name = "picked up"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCombiner3D:material_override:grow_amount")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0284678, 1.5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CSGCombiner3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 3.14159, 0), Vector3(0, 11.1701, 3.14159), Vector3(0, 0, 0.872665)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cbp6p"]
+_data = {
+"RESET": SubResource("Animation_dsgun"),
+"letter_rotating": SubResource("Animation_xtirn"),
+"picked up": SubResource("Animation_0lnsd")
+}
+
+[node name="Letter_collectible" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+script = SubResource("GDScript_t34np")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+material_override = SubResource("StandardMaterial3D_jwt40")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+radius = 0.554824
+height = 0.217219
+sides = 18
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0342053, 0.00984147, 0)
+operation = 2
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCombiner3D/CSGCombiner3D"]
+radius = 0.414452
+height = 0.217219
+sides = 12
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.353662, -8.32667e-16, -0.109863)
+size = Vector3(0.371094, 0.219727, 0.416016)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.215214, -0.02668, 0)
+size = Vector3(0.660782, 0.145493, 0.2146)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0, 0.740202, 0.833838, 1)
+light_energy = 2.0
+shadow_enabled = true
+omni_range = 7.0
+omni_attenuation = 0.63728
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_jqowg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cbp6p")
+}
+autoplay = "letter_rotating"
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("1_sbie3")
+volume_db = -3.0
+autoplay = true
+max_distance = 10.0
+
+[node name="AudioStreamPlayer3D2" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_y73wj")
+volume_db = -15.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

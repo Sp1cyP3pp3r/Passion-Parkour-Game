@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://c1n8xrti8afpc"]
+[gd_scene load_steps=38 format=3 uid="uid://c1n8xrti8afpc"]
 
 [ext_resource type="Script" path="res://Characters/player.gd" id="1_oa43o"]
 [ext_resource type="Script" path="res://addons/finite_state_machine/scripts/finite_state_machine.gd" id="2_p4q1k"]
@@ -7,15 +7,14 @@
 [ext_resource type="Script" path="res://Characters/legs.gd" id="3_sof65"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Idle.gd" id="5_6pvtv"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Run.gd" id="6_q5vx6"]
-[ext_resource type="Script" path="res://addons/post_processing/node/post_process.gd" id="7_ntk6x"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Air.gd" id="7_q0tn7"]
-[ext_resource type="Resource" uid="uid://bqgmj3h5w62hd" path="res://postpros.tres" id="8_67wo0"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Jump.gd" id="8_856fg"]
 [ext_resource type="Curve" uid="uid://cv4u1kjdyu52w" path="res://Characters/run_curve.tres" id="8_iqy3b"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Crouch.gd" id="9_84rn1"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Slide.gd" id="10_d4xg0"]
 [ext_resource type="Script" path="res://Characters/StateMachine/Wallrun.gd" id="11_5sljj"]
 [ext_resource type="Script" path="res://Characters/StateMachine/UpWallrun.gd" id="13_47a8u"]
+[ext_resource type="Material" uid="uid://cgmjuiaq01684" path="res://TestStuff/Shaders/outline.tres" id="17_kpc3n"]
 
 [sub_resource type="Gradient" id="Gradient_5ns4l"]
 
@@ -46,12 +45,21 @@ height = 1.9
 radius = 0.25
 height = 0.75
 
+[sub_resource type="QuadMesh" id="QuadMesh_mlyqg"]
+lightmap_size_hint = Vector2i(12, 12)
+material = ExtResource("17_kpc3n")
+flip_faces = true
+size = Vector2(2, 2)
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_rdl2t"]
 height = 0.1
 radius = 0.2
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ckefi"]
+size = Vector3(1, 1.6, 0.5)
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_mm4ee"]
-height = 0.85
+height = 0.7
 radius = 0.45
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5qlqq"]
@@ -79,7 +87,7 @@ _data = [Vector2(0, 0), 0.0, 2.43212, 0, 0, Vector2(1, 1), 0.148289, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_lin1y"]
-_data = [Vector2(0, 0), 0.0, -0.489645, 0, 0, Vector2(0.367857, 0.426415), 4.22642, 4.22642, 0, 0, Vector2(0.582143, 0.954717), 0.234801, 0.234801, 0, 0, Vector2(0.746429, 0.501887), -4.07547, -4.07547, 0, 0, Vector2(1, 0.0943396), -0.716342, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, -0.489645, 0, 0, Vector2(0.308824, 0.366038), 4.22642, 4.22642, 0, 0, Vector2(0.582143, 0.954717), 0.234801, 0.234801, 0, 0, Vector2(0.746429, 0.501887), -4.07547, -4.07547, 0, 0, Vector2(1, 0.0943396), -0.716342, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="LabelSettings" id="LabelSettings_mm6q2"]
@@ -91,6 +99,9 @@ outline_color = Color(0, 0, 0, 1)
 font_size = 29
 outline_size = 5
 outline_color = Color(0.0962047, 0.0962048, 0.0962047, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_x328j"]
+font_size = 42
 
 [sub_resource type="SphereMesh" id="SphereMesh_iqohg"]
 radius = 0.1
@@ -128,11 +139,21 @@ script = ExtResource("3_kj3jh")
 [node name="Camera" type="Camera3D" parent="Head"]
 current = true
 
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Head/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00268042, -1.00578)
+mesh = SubResource("QuadMesh_mlyqg")
+skeleton = NodePath("../../..")
+
 [node name="HeadFreeSpaceCast" type="ShapeCast3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.250672, 0)
 enabled = false
 shape = SubResource("CylinderShape3D_rdl2t")
 target_position = Vector3(0, 0.45, 0)
+
+[node name="ClimbDetector" type="ShapeCast3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.162644, -0.525881)
+shape = SubResource("BoxShape3D_ckefi")
+target_position = Vector3(0, 0, 0)
 
 [node name="Body" type="Node3D" parent="." node_paths=PackedStringArray("wall_shapecast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00055, 0)
@@ -140,10 +161,27 @@ script = ExtResource("3_kv3lp")
 wall_shapecast = NodePath("WallShape")
 
 [node name="WallShape" type="ShapeCast3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0967894, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.474861, 0)
 enabled = false
 shape = SubResource("CylinderShape3D_mm4ee")
 target_position = Vector3(0, 0, 0)
+
+[node name="WallRayHead" type="RayCast3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.834449, 0)
+enabled = false
+target_position = Vector3(0.5, 0, 0)
+hit_from_inside = true
+
+[node name="UpWallRayHead" type="RayCast3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16018, 0)
+enabled = false
+target_position = Vector3(0.5, 0, 0)
+hit_from_inside = true
+
+[node name="WallRaySide" type="RayCast3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47, 0)
+enabled = false
+target_position = Vector3(0.5, 0, 0)
 
 [node name="Legs" type="Node3D" parent="."]
 script = ExtResource("3_sof65")
@@ -230,16 +268,20 @@ script = ExtResource("11_5sljj")
 speed_curve = SubResource("Curve_52wli")
 wall_curve = SubResource("Curve_lin1y")
 
+[node name="Timer" type="Timer" parent="FiniteStateMachine/Wallrun"]
+process_callback = 0
+wait_time = 1.98
+one_shot = true
+
+[node name="DotTimer" type="Timer" parent="FiniteStateMachine/Wallrun"]
+process_callback = 0
+wait_time = 0.05
+
 [node name="UpWallrun" type="Node" parent="FiniteStateMachine"]
 script = ExtResource("13_47a8u")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true
-
-[node name="PostProcess" type="CanvasLayer" parent="CanvasLayer"]
-script = ExtResource("7_ntk6x")
-configuration = ExtResource("8_67wo0")
-dynamically_update = false
 
 [node name="Label2" type="Label" parent="CanvasLayer"]
 unique_name_in_owner = true
@@ -253,6 +295,7 @@ horizontal_alignment = 2
 
 [node name="Label3" type="Label" parent="CanvasLayer"]
 unique_name_in_owner = true
+visible = false
 light_mask = 0
 offset_left = 586.0
 offset_top = 51.0
@@ -280,9 +323,19 @@ offset_left = 592.0
 offset_top = 421.0
 offset_right = 1123.0
 offset_bottom = 491.0
-text = "NTRCN TRNMCG"
+text = "gay hotdog
+"
 label_settings = SubResource("LabelSettings_f0lxb")
 horizontal_alignment = 2
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 82.0
+offset_top = 54.0
+offset_right = 170.0
+offset_bottom = 112.0
+text = "0/10
+"
+label_settings = SubResource("LabelSettings_x328j")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.955958, -0.791345)
@@ -291,3 +344,5 @@ mesh = SubResource("SphereMesh_iqohg")
 
 [connection signal="timeout" from="FiniteStateMachine/Run/Timer" to="FiniteStateMachine/Run" method="update_yaw"]
 [connection signal="timeout" from="FiniteStateMachine/Air/CoyoteTimer" to="FiniteStateMachine/Air" method="coyote_disable_jump"]
+[connection signal="timeout" from="FiniteStateMachine/Wallrun/Timer" to="FiniteStateMachine/Wallrun" method="wallrun_timeout"]
+[connection signal="timeout" from="FiniteStateMachine/Wallrun/DotTimer" to="FiniteStateMachine/Wallrun" method="update_dot"]

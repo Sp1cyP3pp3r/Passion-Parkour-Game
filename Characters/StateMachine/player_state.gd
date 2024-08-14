@@ -24,7 +24,7 @@ func handle_movement(delta):
 	var _dot = direction.dot(-player.global_transform.basis.z)
 	var _dot_p = _dot * 0.25 + 0.75
 	
-	var additional_speed = player.speed * accel_curve.sample(player.add_speed_ratio) / 2
+	var additional_speed = player.speed * accel_curve.sample(player.add_speed_ratio) / 2 * 1.2
 	var total_speed = player.speed + additional_speed
 	player.velocity.x = lerp(player.velocity.x, direction.x * total_speed * _dot_p, player.acceleration * delta)
 	player.velocity.z = lerp(player.velocity.z, direction.z * total_speed * _dot_p, player.acceleration * delta)

@@ -9,9 +9,7 @@ extends Node3D
 func is_on_wall() -> bool:
 	wall_shapecast.force_shapecast_update()
 	if wall_shapecast.is_colliding():
-		if not is_head_colliding(wall_shapecast.get_collision_point(0)):
-			return false
-		var _normal = wall_shapecast.get_collision_normal(0)
+		var _normal = get_wall_normal()
 		var _normal_snapped = snapped(_normal.dot(Vector3.UP), 0.001)
 		if _normal_snapped <= 0.25 and _normal_snapped >= -0.19:
 			return true
@@ -60,7 +58,7 @@ func get_wall_sign_direction() -> int:
 		return sign_direction
 	return 0
 
-func is_head_colliding(point : Vector3) -> bool:
+func is_head_colliding() -> bool:
 	var _point = Vector3(-0.5, 0, 0) * get_wall_sign_direction()
 	wall_ray_head.target_position = _point
 	wall_ray_head.target_position.y = 0
@@ -69,7 +67,7 @@ func is_head_colliding(point : Vector3) -> bool:
 		return false
 	return true
 
-func is_upper_head_colliding(point : Vector3) -> bool:
+func is_upper_head_colliding() -> bool:
 	var _point = Vector3(-0.5, 0, 0) * get_wall_sign_direction()
 	up_wall_ray_head.target_position = _point
 	up_wall_ray_head.target_position.y = 0

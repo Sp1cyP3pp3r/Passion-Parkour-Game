@@ -77,18 +77,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [0.2, 0.001, 0.1]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AudioStreamPlayer3D:volume_db")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.9, 2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [-5.0, -6.0, -4.5]
-}
 
 [sub_resource type="Animation" id="Animation_0lnsd"]
 resource_name = "picked up"
@@ -174,12 +162,12 @@ autoplay = "letter_rotating"
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("1_sbie3")
-volume_db = -3.0
+volume_db = -40.0
 autoplay = true
 max_distance = 10.0
 
 [node name="AudioStreamPlayer3D2" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_y73wj")
-volume_db = -15.0
+volume_db = -40.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

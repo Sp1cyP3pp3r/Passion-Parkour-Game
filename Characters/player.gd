@@ -4,6 +4,7 @@ class_name Player
 @export var legs : Node3D
 @export var head : Node3D
 @export var body : Node3D
+@export var climb : Node3D
 
 @export var speed : float
 @export var acceleration : float

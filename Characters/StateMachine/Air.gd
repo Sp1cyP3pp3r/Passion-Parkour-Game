@@ -15,6 +15,7 @@ func on_physics_process(delta):
 	handle_landing()
 	handle_movement(delta)
 	handle_jump()
+	handle_ledgegrab()
 
 # Called when the state machine exits this state.
 func on_exit():

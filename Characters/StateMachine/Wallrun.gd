@@ -45,10 +45,11 @@ func on_physics_process(delta):
 	
 	player.move_and_slide()
 	
+	
 	if player.legs.is_floor_raycast() and not player.legs.is_on_slope():
 		change_state("Idle")
 	
-	if not player.body.is_on_wall():
+	if not player.body.is_on_wall():# or not player.body.is_head_colliding():
 		wallrun_timeout()
 	
 	if Input.is_action_just_pressed("jump"):
@@ -108,7 +109,7 @@ func wallrun_timeout():
 
 var _dot : float
 func check_curve(delta):
-	if _dot >= 0.69:
+	if _dot >= 0.0:
 		previous_wall = player.body.get_wall_normal()
 	else:
 		wallrun_timeout()

@@ -8,16 +8,16 @@ var snap_margin = 0.01
 var accel_curve : Curve = preload("res://Characters/run_curve.tres")
 var is_player_on_stairs : bool = false
 
-func catch_movement():
+func catch_movement() -> void:
 	if Input.is_action_pressed("move_backward") or Input.is_action_pressed("move_forward") or \
 	Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"):
 		change_state("Run")
 
-func catch_no_movement():
+func catch_no_movement() -> void:
 	if player.velocity.is_equal_approx(Vector3.ZERO):
 		change_state("Idle")
 
-func handle_movement(delta):
+func handle_movement(delta) -> void:
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = input_dir.rotated(-player.rotation.y)
 	direction = Vector3(direction.x, 0, direction.y)
@@ -33,7 +33,7 @@ func handle_movement(delta):
 	player.move_and_slide()
 
 
-func slopes_and_stairs(delta):
+func slopes_and_stairs(delta) -> void:
 	if player.legs.is_on_slope():
 		snap_to_floor(delta)
 		#%Label5.text = "slopes!"
@@ -54,30 +54,30 @@ func slopes_and_stairs(delta):
 		#%Label5.text = "floor (wrtf)!"
 		
 
-func snap_to_floor(delta):
+func snap_to_floor(delta) -> void:
 	if player.legs.is_ray_floor() and player.velocity.y >= 0:
 		player.global_position.y = player.legs.get_floor_point().y - snap_margin
 
-func handle_stairs(delta):
+func handle_stairs(delta) -> void:
 	var _point = player.legs.get_staircase_point()
 	if player.head.head_free_space():
 		if not _point.is_equal_approx(Vector3.ZERO):
 			player.global_position.y = _point.y - snap_margin
 
-func handle_no_floor():
+func handle_no_floor() -> void:
 	if not player.legs.is_ray_floor():
 		change_state("Air")
 
-func handle_fall(delta):
+func handle_fall(delta) -> void:
 	player.velocity.y -= player.gravity * delta
 
 
-func handle_jump():
+func handle_jump() -> void:
 	if Input.is_action_just_pressed("jump"):
 		if can_jump():
 			change_state("Jump")
 
-func smooth_landing(delta):
+func smooth_landing(delta) -> void:
 	if player.velocity.y > 0:
 		player.velocity.y = -0.01
 	if player.velocity.y <= 0:
@@ -88,7 +88,7 @@ func can_jump() -> bool:
 		return true
 	return false
 
-func handle_crouch():
+func handle_crouch() -> void:
 	if Input.is_action_just_pressed("crouch"):
 		if can_crouch_in_this_state:
 			if player.add_speed_ratio >= 0.2:
@@ -96,7 +96,7 @@ func handle_crouch():
 			else:
 				change_state("Crouch")
 
-func tween_camera_crouch():
+func tween_camera_crouch() -> void:
 	var _tween := create_tween()
 	var _position : float = 0.55
 	var _time : float = 0.32
@@ -105,7 +105,7 @@ func tween_camera_crouch():
 	await  _tween.finished
 	_tween.kill()
 	
-func tween_camera_uncrouch():
+func tween_camera_uncrouch() -> void:
 	var _tween := create_tween()
 	var _position : float = 1.5
 	var _time : float = 0.41
@@ -114,7 +114,18 @@ func tween_camera_uncrouch():
 	await  _tween.finished
 	_tween.kill()
 
-func handle_uncrouch():
+func handle_uncrouch() -> void:
 	if Input.is_action_just_pressed("crouch") or Input.is_action_just_pressed("jump"):
 		if player.head.head_free_space():
 			change_state("Run")
+
+func handle_ledgegrab() -> void:
+	if player.velocity.y >= -200:
+		if player.climb.is_obstacle():
+			if player.climb.get_obstacle_height() >= 2.2 and\
+			player.climb.get_obstacle_height() <= 3:
+				change_state("LedgeGrab")
+			elif player.climb.get_obstacle_height() >= 1 and\
+			player.climb.get_obstacle_height() <= 2.19:
+				change_state("Mantle")
+	pass

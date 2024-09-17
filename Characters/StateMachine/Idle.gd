@@ -13,6 +13,7 @@ func on_physics_process(delta):
 	smooth_landing(delta)
 	handle_jump()
 	handle_crouch()
+	handle_ledgegrab()
 	
 	player.add_speed_ratio = lerp(player.add_speed_ratio, 0.0, delta * 2.5)
 	player.velocity.x = lerp(player.velocity.x, 0 * player.speed, player.acceleration * delta)
@@ -24,4 +25,3 @@ func on_physics_process(delta):
 # Called when the state machine exits this state.
 func on_exit():
 	pass
-

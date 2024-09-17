@@ -15,6 +15,9 @@ func _physics_process(delta):
 	if Input.is_key_pressed(KEY_Q):
 		move_teleport(player.global_position)
 	if Input.is_key_pressed(KEY_E):
+		player.global_rotation.y = player.head.camera.global_rotation.y
+		player.head.camera.rotation.y = 0
+		player.head.do_rotate_owner = true
 		player.velocity = Vector3.ZERO
 		player.state_machine.current_state.change_state(\"Idle\")
 		begin_teleport(Teleport_Point)

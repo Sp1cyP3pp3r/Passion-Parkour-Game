@@ -28,8 +28,8 @@ func on_physics_process(delta):
 	handle_crouch()
 	handle_jump()
 	camera_yaw()
+	handle_ledgegrab()
 	
-	$"../../MeshInstance3D".global_position = player.global_position + previous_yaw + Vector3(0, 1, 0)
 
 func on_input(event: InputEvent):
 	pass

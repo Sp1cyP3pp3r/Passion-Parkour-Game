@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://c1n8xrti8afpc"]
+[gd_scene load_steps=36 format=3 uid="uid://c1n8xrti8afpc"]
 
 [ext_resource type="Script" path="res://Characters/player.gd" id="1_oa43o"]
 [ext_resource type="Script" path="res://addons/finite_state_machine/scripts/finite_state_machine.gd" id="2_p4q1k"]
@@ -39,6 +39,8 @@ size = Vector2(2, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ckefi"]
 size = Vector3(0.4, 1.6, 0.3)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5u8qr"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_mm4ee"]
 height = 0.7
@@ -143,6 +145,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.162644, -0.248098)
 shape = SubResource("BoxShape3D_ckefi")
 target_position = Vector3(0, 0, -0.25)
 debug_shape_custom_color = Color(0.146232, 0.90059, 3.46541e-06, 1)
+
+[node name="MantleFreeSpace" type="SpringArm3D" parent="Climb"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.847832, -0.505697)
+shape = SubResource("SphereShape3D_5u8qr")
+spring_length = 1.81
+
+[node name="MantleContainer" type="Node3D" parent="Climb/MantleFreeSpace"]
+
+[node name="StandFreeSpace" type="ShapeCast3D" parent="Climb/MantleFreeSpace/MantleContainer"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.38419e-07, -1.49072)
+enabled = false
+shape = SubResource("CapsuleShape3D_oyfeb")
+
+[node name="CrouchFreeSpace" type="ShapeCast3D" parent="Climb/MantleFreeSpace/MantleContainer"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.98023e-07, -0.915717)
+enabled = false
+shape = SubResource("CapsuleShape3D_p17bk")
 
 [node name="Body" type="Node3D" parent="." node_paths=PackedStringArray("wall_shapecast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00055, 0)
@@ -273,6 +292,7 @@ script = ExtResource("13_47a8u")
 script = ExtResource("17_qy47v")
 
 [node name="Mantle" type="Node" parent="FiniteStateMachine"]
+unique_name_in_owner = true
 script = ExtResource("18_433q2")
 
 [node name="Vault" type="Node" parent="FiniteStateMachine"]
@@ -339,3 +359,4 @@ label_settings = SubResource("LabelSettings_x328j")
 [connection signal="timeout" from="FiniteStateMachine/Air/CoyoteTimer" to="FiniteStateMachine/Air" method="coyote_disable_jump"]
 [connection signal="timeout" from="FiniteStateMachine/Wallrun/Timer" to="FiniteStateMachine/Wallrun" method="wallrun_timeout"]
 [connection signal="timeout" from="FiniteStateMachine/Wallrun/DotTimer" to="FiniteStateMachine/Wallrun" method="update_dot"]
+[connection signal="end_mantle" from="FiniteStateMachine/Mantle" to="FiniteStateMachine/Mantle" method="change_state"]

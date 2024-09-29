@@ -127,5 +127,6 @@ func handle_ledgegrab() -> void:
 				change_state("LedgeGrab")
 			elif player.climb.get_obstacle_height() >= 1 and\
 			player.climb.get_obstacle_height() <= 2.19:
-				change_state("Mantle")
+				if player.climb.can_mantle():
+					change_state("Mantle")
 	pass

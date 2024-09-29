@@ -28,7 +28,8 @@ func on_physics_process(delta):
 	handle_crouch()
 	handle_jump()
 	camera_yaw()
-	handle_ledgegrab()
+	if Input.is_action_just_pressed("jump"):
+		handle_ledgegrab()
 	
 
 func on_input(event: InputEvent):

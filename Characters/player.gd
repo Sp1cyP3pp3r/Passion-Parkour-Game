@@ -18,8 +18,6 @@ var debug_letters : = 0
 func _physics_process(delta):
 	if Input.is_key_pressed(KEY_R):
 		get_tree().reload_current_scene()
-	if Input.is_key_pressed(KEY_SHIFT):
-		velocity.y = -20
 	%Label2.text = str($FiniteStateMachine.current_state.name)
 	%Label4.text = str(snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.001))\
 	 + " " + str(snapped(speed, 0.1)) + " " + str(snapped(add_speed_ratio, 0.01)) + "\n" + str(snapped(velocity.y, 0.1))

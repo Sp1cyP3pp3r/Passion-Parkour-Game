@@ -8,11 +8,12 @@ var reset_point : Vector3
 @export var player : Node3D
 
 func _ready():
+	global_position = player.global_position
 	Teleport_Point = global_position
 	reset_point = global_position
 
 func _physics_process(delta):
-	if Input.is_key_pressed(KEY_Q):
+	if Input.is_key_pressed(KEY_F):
 		move_teleport(player.global_position)
 	if Input.is_key_pressed(KEY_E):
 		player.global_rotation.y = player.head.camera.global_rotation.y

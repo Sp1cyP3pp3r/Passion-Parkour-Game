@@ -113,8 +113,3 @@ func reapply_effects() -> void:
 	for property in reapplied_properties:
 		print(str(effected_game_object.name) + " " + str(get_instance_id()) + " - final value (reapply) " + str(effected_game_object.get(property)))
 		
-
-
-
-
-

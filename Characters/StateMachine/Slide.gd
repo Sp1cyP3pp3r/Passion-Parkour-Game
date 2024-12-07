@@ -7,6 +7,8 @@ var to_crouch : bool = false
 
 # Called when the state machine enters this state.
 func on_enter():
+	do_uncrouch = false
+	$EnterState.start()
 	player.acceleration = 1
 	if not is_crouching:
 		player.head.head_free_space_cast.target_position.y = 0.9
@@ -27,7 +29,8 @@ func on_physics_process(delta):
 	flow_speed(delta)
 	handle_no_floor()
 	slopes_and_stairs(delta)
-	handle_uncrouch()
+	if do_uncrouch:
+		handle_uncrouch()
 	if snapped(player.add_speed_ratio, 0.01) <= 0.0:
 		crouch_node.is_crouching = true
 		to_crouch = true
@@ -54,11 +57,7 @@ func flow_speed(delta) -> void:
 	handle_movement(delta)
 	#player.velocity = player.velocity * _value
 	#player.move_and_slide()
-	
-	
-	
-	
-	
-	
-	
-	
+
+var do_uncrouch := false
+func _on_enter_state_timeout() -> void:
+	do_uncrouch = true

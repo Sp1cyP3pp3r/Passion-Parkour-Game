@@ -2,9 +2,12 @@ extends Node3D
 
 @onready var obstacle_detector: ShapeCast3D = $ObstacleDetector
 @onready var obstacle_height: RayCast3D = $ObstacleHeight
-@onready var obstacle_obstr: RayCast3D = $ObstacleObstr
-@onready var stand_free_space: ShapeCast3D = $MantleFreeSpace/MantleContainer/StandFreeSpace
-@onready var crouch_free_space: ShapeCast3D = $MantleFreeSpace/MantleContainer/CrouchFreeSpace
+@onready var obstacle_obstr: = $ObstacleObstr
+@onready var stand_free_space: ShapeCast3D = $MantleContainer/StandFreeSpace
+@onready var crouch_free_space: ShapeCast3D = $MantleContainer/CrouchFreeSpace
+@onready var mantle_through: ShapeCast3D = $MantleThrough
+@onready var mantle_container: Node3D = $MantleContainer
+
 
 
 var current_position : Vector3
@@ -15,12 +18,24 @@ signal update_ledge(point : Vector3)
 func _ready() -> void:
 	init_position = position
 
+#func _physics_process(delta: float) -> void:
+	#can_mantle()
 
 func can_mantle() -> bool:
+	if owner.velocity.y < -10:
+		printerr("UR FALLING TOO FAST")
+		return false
+	mantle_through.global_position.y = get_mantle_point().y + 0.5 + 0.015
+	#mantle_through.force_shapecast_update()
+	if mantle_through.is_colliding():
+		printerr("cant mantle through")
+		return false
 	if is_free_space():
 		%Mantle.mantle_point = get_mantle_point()
 		%Mantle.crouch_after = crouched
+		printerr("Mantled")
 		return true
+	printerr("No free space")
 	return false
 
 func get_mantle_point() -> Vector3:
@@ -31,13 +46,16 @@ func get_mantle_point() -> Vector3:
 
 var crouched : bool = false
 func is_free_space() -> bool:
+	mantle_container.global_position = owner.global_position + -owner.global_basis.z * 0.506
+	mantle_container.global_position.y = get_mantle_point().y + 0.1
+	
 	crouch_free_space.force_shapecast_update()
 	if crouch_free_space.is_colliding():
 		return false
 	stand_free_space.force_shapecast_update()
 	if stand_free_space.is_colliding():
 		crouched = true
-		return false
+		return true
 	crouched = false
 	return true
 
@@ -57,6 +75,14 @@ func is_obstacle()  -> bool:
 	return true
 
 var current_normal : Vector3
+
+func can_grab_ledge() -> bool:
+	obstacle_obstr.global_position.y = get_mantle_point().y + 0.03
+	#obstacle_obstr.global_basis.z = current_normal
+	obstacle_obstr.force_raycast_update()
+	if obstacle_obstr.is_colliding():
+		return false
+	return true
 
 func get_obstacle_height() -> float:
 	var _temp_y = obstacle_height.global_position.y

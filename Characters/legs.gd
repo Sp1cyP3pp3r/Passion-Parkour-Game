@@ -114,7 +114,3 @@ func is_stair_near() -> bool:
 			if not free_space_ray_cast.is_colliding():
 				return true
 	return false
-
-
-
-

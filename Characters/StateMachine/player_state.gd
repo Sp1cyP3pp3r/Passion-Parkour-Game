@@ -91,7 +91,7 @@ func can_jump() -> bool:
 func handle_crouch() -> void:
 	if Input.is_action_just_pressed("crouch"):
 		if can_crouch_in_this_state:
-			if player.add_speed_ratio >= 0.2:
+			if player.add_speed_ratio >= 0.15:
 				change_state("Slide")
 			else:
 				change_state("Crouch")
@@ -115,18 +115,45 @@ func tween_camera_uncrouch() -> void:
 	_tween.kill()
 
 func handle_uncrouch() -> void:
-	if Input.is_action_just_pressed("crouch") or Input.is_action_just_pressed("jump"):
-		if player.head.head_free_space():
-			change_state("Run")
+	if Global.crouch_toggle:
+		if Input.is_action_just_pressed("uncrouch"):
+			if player.head.head_free_space():
+				change_state("Run")
+				
+	else:
+		if not Input.is_action_pressed("crouch"):
+			if player.head.head_free_space():
+				change_state("Run")
+
+var can_grab_ledge : bool = true
 
 func handle_ledgegrab() -> void:
-	if player.velocity.y >= -200:
-		if player.climb.is_obstacle():
-			if player.climb.get_obstacle_height() >= 2.2 and\
-			player.climb.get_obstacle_height() <= 3:
-				change_state("LedgeGrab")
-			elif player.climb.get_obstacle_height() >= 1 and\
-			player.climb.get_obstacle_height() <= 2.19:
-				if player.climb.can_mantle():
-					change_state("Mantle")
-	pass
+	if can_grab_ledge:
+		if player.velocity.y >= -20:
+			if player.climb.is_obstacle():
+				if player.climb.can_grab_ledge():
+					if player.climb.get_obstacle_height() >= 2.2 and\
+					player.climb.get_obstacle_height() <= 3:
+						player.climb.can_mantle()
+						change_state("LedgeGrab")
+					elif player.climb.get_obstacle_height() >= 1 and\
+					player.climb.get_obstacle_height() <= 2.19:
+						if player.climb.can_mantle():
+							change_state("Mantle")
+
+var is_quickturning : bool = false
+func handle_quickturn() -> void:
+	if is_quickturning:
+		player.velocity = Vector3(0, player.velocity.y, 0)
+	
+	if Input.is_action_just_pressed("quick_turn"):
+		var tween = create_tween()
+		var _to = player.rotation.y - PI
+		var time = 0.25
+		tween.tween_property(player, "rotation:y", _to, time)
+		tween.play()
+		is_quickturning = true
+		await  tween.finished
+		is_quickturning = false
+		tween.kill()
+	

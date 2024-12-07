@@ -108,9 +108,9 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cbp6p"]
 _data = {
-"RESET": SubResource("Animation_dsgun"),
-"letter_rotating": SubResource("Animation_xtirn"),
-"picked up": SubResource("Animation_0lnsd")
+&"RESET": SubResource("Animation_dsgun"),
+&"letter_rotating": SubResource("Animation_xtirn"),
+&"picked up": SubResource("Animation_0lnsd")
 }
 
 [node name="Letter_collectible" type="Area3D"]
@@ -156,7 +156,7 @@ shape = SubResource("SphereShape3D_jqowg")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_cbp6p")
+&"": SubResource("AnimationLibrary_cbp6p")
 }
 autoplay = "letter_rotating"
 

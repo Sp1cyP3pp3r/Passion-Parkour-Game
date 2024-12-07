@@ -11,6 +11,7 @@ var previous_wall : Vector3 = Vector3.ZERO
 
 # Called when the state machine enters this state.
 func on_enter():
+	do_shapecast = false
 	player.add_speed_ratio += -0.2
 	player.speed = 5
 	i = 0
@@ -19,16 +20,22 @@ func on_enter():
 	player.head.do_rotate_owner = false
 	$Timer.start()
 	$DotTimer.start()
+	$NoWall/NoWallTimer.start()
 	previous_wall = player.body.get_wall_normal()
 	_dot = 1
+
+var _can_jump := true
+
 
 # Called every physics frame when this state is active.
 func on_physics_process(delta):
 	i += delta / 1.1
-	player.add_speed_ratio -= delta / 10
+	player.add_speed_ratio += delta / 10
+	
+	shapecast_update()
 	
 	if _do_wallrun:
-		var additional_speed = player.speed * accel_curve.sample(player.add_speed_ratio) / 2
+		var additional_speed = player.speed * speed_curve.sample(player.add_speed_ratio) / 2
 		var _total_speed = player.speed + additional_speed
 		player.velocity.x = (-player.body.get_wall_normal() * 1.25 + \
 		player.body.get_wall_forward() * _total_speed).x
@@ -52,12 +59,24 @@ func on_physics_process(delta):
 	if not player.body.is_on_wall():# or not player.body.is_head_colliding():
 		wallrun_timeout()
 	
-	if Input.is_action_just_pressed("jump"):
-		_do_wallrun = false
-		player.velocity += player.body.get_wall_normal() * 3.25
-		change_state("Jump")
+	if _can_jump:
+		if Input.is_action_just_pressed("jump"):
+			_do_wallrun = false
+			$"../WallJump".direction = player.body.get_wall_normal()
+			change_state("WallJump")
 	
 	
+		if Input.is_action_just_pressed("quick_turn"):
+			var tween = create_tween()
+			var _to = 90 * -player.body.get_wall_sign_direction()
+			var _time = 0.1
+			tween.tween_property(%Camera, "rotation_degrees:y", _to, _time)
+			_can_jump = false
+			tween.play()
+			await tween.finished
+			_can_jump = true
+			tween.kill()
+		
 
 # Called when the state machine exits this state.
 func on_exit():
@@ -117,3 +136,16 @@ func check_curve(delta):
 func update_dot():
 	_dot = previous_wall.dot(player.body.get_wall_normal())
 	%Label5.text = str(_dot)
+
+var do_shapecast : bool = false
+func shapecast_update():
+	$NoWall.global_basis = player.global_basis
+	$NoWall.global_position = player.global_position + Vector3.UP
+	if do_shapecast:
+		if $NoWall.is_colliding():
+			wallrun_timeout()
+
+
+
+func _on_no_wall_timer_timeout() -> void:
+	do_shapecast = true

@@ -1,13 +1,13 @@
 [gd_scene load_steps=8 format=4 uid="uid://cikwkavypqcss"]
 
-[ext_resource type="Texture2D" uid="uid://dgcqobrq1r2hu" path="res://Textures/BasketBall1.png" id="1_dc2ff"]
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ge10y"]
 friction = 0.38
-bounce = 0.86
+bounce = 0.89
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_u1ol3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_62rs6"]
-albedo_texture = ExtResource("1_dc2ff")
+albedo_texture = SubResource("CompressedTexture2D_u1ol3")
 
 [sub_resource type="SphereMesh" id="SphereMesh_jh1b6"]
 

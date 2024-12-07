@@ -5,16 +5,27 @@ var no_action : bool = false
 
 # Called when the state machine enters this state.
 func on_enter():
+	player.velocity.y = 0
 	player.head.do_rotate_owner = false
+	player.add_speed_ratio = 0
 	cam_tween()
+	body_tween()
 
 # Called every physics frame when this state is active.
 func on_physics_process(delta):
 	if not no_action:
-		if Input.is_action_just_pressed("jump"):
-			#player.velocity = -player.global_basis.z * 2
-			#player.velocity.y = 10
-			change_state("Mantle")
+		if player.climb.can_mantle():
+			if Input.is_action_just_pressed("mantle"):
+					change_state("Mantle")
+		#REDO
+		else:
+			if Input.is_action_just_pressed("mantle"):
+				change_state("Jump")
+		
+		if Input.is_action_just_pressed("leave_ledge"):
+			player.velocity.y = 0
+			change_state("Air")
+		
 
 # Called when the state machine exits this state.
 func on_exit():
@@ -22,6 +33,23 @@ func on_exit():
 	player.global_rotation.y = player.head.camera.global_rotation.y
 	player.head.camera.rotation.y = 0
 	player.head.do_rotate_owner = true
+
+func body_tween():
+	var tween = create_tween()
+	var _to = ledge_point.y - 2
+	var _to2 = player.global_position + -player.climb.current_normal * 2
+	var time = 0.3
+	tween.tween_property(player, "global_position:y", _to, time)
+	#tween_rotate.tween_method(player.look_at, _from, _to2, time)
+	player.look_at(_to2)
+	no_action = true
+	tween.play()
+	await tween.finished
+	no_action = false
+	tween.kill()
+	player.global_rotation.x = 0
+	player.global_rotation.z = 0
+	
 
 func cam_tween():
 	var tween = create_tween()

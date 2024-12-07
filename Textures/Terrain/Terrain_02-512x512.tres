@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://7b2adcpf7ytp"]
+
+[ext_resource type="Texture2D" uid="uid://dj461q26s0slu" path="res://Textures/Terrain/Terrain_02-512x512.png" id="1_fxlg6"]
+
+[resource]
+albedo_texture = ExtResource("1_fxlg6")
+metallic_specular = 0.0
+texture_filter = 2

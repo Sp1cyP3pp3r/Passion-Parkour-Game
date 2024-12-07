@@ -4,7 +4,7 @@ extends PlayerState
 # Called when the state machine enters this state.
 func on_enter():
 	print("\n JUMPED")
-	player.add_speed_ratio += 0.3
+	player.add_speed_ratio += 0.2
 	player.acceleration = 1.2
 	player.velocity.y = player.jump_power * 1.1
 
@@ -25,14 +25,14 @@ func on_exit():
 	pass
 
 func handle_wallrun():
-	var _vel = player.velocity
-	_vel.y = 0
-	var _len = _vel.length()
+	#var _vel = player.velocity
+	#_vel.y = 0
+	#var _len = _vel.length()
 	if player.body.is_on_wall():
 		# horizontal wallrun
 		var _dot = player.body.get_wall_dot()
-		if _dot:
-			if _dot <= -0.1 and _dot >= -0.85:
+		if _dot != -999:
+			if _dot <= -0.05 and _dot >= -0.85:
 				if player.body.is_upper_head_colliding():
 					change_state("Wallrun")
 			# vertical wallrun

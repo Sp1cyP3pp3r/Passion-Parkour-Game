@@ -6,10 +6,10 @@
 
 [resource]
 script = ExtResource("1_dlf23")
-inverse_scale_factor = 16.0
+inverse_scale_factor = 32.0
 entity_fgd = ExtResource("1_hd7se")
 entity_name_property = ""
-base_texture_dir = "res://textures"
+base_texture_dir = "res://Textures"
 texture_file_extensions = Array[String](["png", "jpg", "jpeg", "bmp", "tga", "webp"])
 clip_texture = "special/clip"
 skip_texture = "special/skip"
@@ -26,5 +26,5 @@ ao_map_pattern = "%s_ao.%s"
 height_map_pattern = "%s_height.%s"
 unshaded = false
 save_generated_materials = true
-uv_unwrap_texel_size = 1.0
+uv_unwrap_texel_size = 2.0
 use_trenchbroom_groups_hierarchy = false

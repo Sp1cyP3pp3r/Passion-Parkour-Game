@@ -5,6 +5,7 @@ var is_crouching : bool = false
 
 # Called when the state machine enters this state.
 func on_enter():
+	#player.velocity.y = -1
 	if is_crouching == false:
 		player.head.head_free_space_cast.target_position.y = 0.9
 		%CrouchCollision.disabled = false
@@ -21,8 +22,9 @@ func on_physics_process(delta):
 	handle_movement(delta)
 	handle_no_floor()
 	slopes_and_stairs(delta)
+	handle_quickturn()
+	smooth_landing(delta)
 	handle_uncrouch()
-	
 
 
 # Called when the state machine exits this state.
@@ -32,6 +34,3 @@ func on_exit():
 	tween_camera_uncrouch()
 	is_crouching = false
 	player.head.head_free_space_cast.target_position.y = 0.45
-
-
-

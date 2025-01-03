@@ -16,6 +16,7 @@ func on_enter():
 	player.look_at(pos)
 	cam_tween()
 	$WallTimer.start()
+	$"../Wallrun".previous_wall = Vector3.ZERO
 
 
 var normal : Vector3
@@ -69,7 +70,7 @@ func on_physics_process(delta):
 			else:
 				change_state("UpWallrunJump")
 	
-	if player.legs.is_touching_floor():
+	if player.is_on_floor():
 		change_state("Air")
 
 func on_exit():
@@ -92,7 +93,7 @@ func cam_tween():
 	var tween = create_tween()
 	var _to = PI / 2 / 1.2
 	var time = 0.28
-	tween.tween_property(%Camera, "rotation:x", _to, time)
+	tween.tween_property(%RemoteCamera, "rotation:x", _to, time)
 	tween.play()
 	await tween.finished
 	tween.kill()
@@ -101,7 +102,7 @@ func cam_tween_end():
 	var tween = create_tween()
 	var _to = 0
 	var time = 0.28
-	tween.tween_property(%Camera, "rotation:x", _to, time)
+	tween.tween_property(%RemoteCamera, "rotation:x", _to, time)
 	tween.play()
 	await tween.finished
 	tween.kill()

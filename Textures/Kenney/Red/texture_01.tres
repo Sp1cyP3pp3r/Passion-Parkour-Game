@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://8yfnjl2usq0e"]
+
+[ext_resource type="Texture2D" uid="uid://d1vycv6a7y1se" path="res://Textures/Kenney/Red/texture_01.png" id="1_cclki"]
+
+[resource]
+albedo_texture = ExtResource("1_cclki")
+metallic_specular = 0.0
+texture_filter = 2

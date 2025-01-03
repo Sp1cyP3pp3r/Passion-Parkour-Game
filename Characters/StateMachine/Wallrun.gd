@@ -53,7 +53,7 @@ func on_physics_process(delta):
 	player.move_and_slide()
 	
 	
-	if player.legs.is_floor_raycast() and not player.legs.is_on_slope():
+	if player.is_on_floor() and not player.legs.is_on_slope():
 		change_state("Idle")
 	
 	if not player.body.is_on_wall():# or not player.body.is_head_colliding():
@@ -70,7 +70,7 @@ func on_physics_process(delta):
 			var tween = create_tween()
 			var _to = 90 * -player.body.get_wall_sign_direction()
 			var _time = 0.1
-			tween.tween_property(%Camera, "rotation_degrees:y", _to, _time)
+			tween.tween_property(%RemoteCamera, "rotation_degrees:y", _to, _time)
 			_can_jump = false
 			tween.play()
 			await tween.finished
@@ -90,9 +90,9 @@ func on_exit():
 
 func camera_tilt(delta):
 	var sign_direction = player.body.get_wall_sign_direction()
-	var _dot = abs(player.body.get_wall_dot())
+	var c_dot = abs(player.body.get_wall_dot())
 	var cam_tilt : float = 12 * -sign_direction
-	cam_tilt = cam_tilt - (cam_tilt * _dot)
+	cam_tilt = cam_tilt - (cam_tilt * c_dot)
 	player.head.camera.rotation_degrees.z = lerp(player.head.camera.rotation_degrees.z, cam_tilt, delta)
 	
 	var _forward : Vector3 = player.body.get_wall_forward()
@@ -128,7 +128,7 @@ func wallrun_timeout():
 
 var _dot : float
 func check_curve(delta):
-	if _dot >= 0.0:
+	if _dot >= 0.225:
 		previous_wall = player.body.get_wall_normal()
 	else:
 		wallrun_timeout()

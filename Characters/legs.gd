@@ -92,7 +92,7 @@ func is_touching_floor() -> bool:
 	if is_ray_floor():
 		#var _pointY = get_floor_point().y
 		#if snappedf(_pointY, 0.01) == snappedf(owner.global_position.y, 0.01):
-		if owner.is_on_floor():
+		#if owner.is_on_floor():
 			return true
 	return false
 
@@ -114,3 +114,21 @@ func is_stair_near() -> bool:
 			if not free_space_ray_cast.is_colliding():
 				return true
 	return false
+
+func get_floor_dot() -> float:
+	if not floor_ray.is_colliding():
+		return 1.0
+	
+	var up : Vector3 = owner.up_direction
+	var normal : Vector3 = floor_ray.get_collision_normal()
+	return up.dot(normal)
+
+func get_floor_forward():
+	var up : Vector3 = owner.up_direction
+	var normal : Vector3 = floor_ray.get_collision_normal()
+	var angle : float = up.angle_to(normal)
+	var difference : float = PI/2 - angle
+	var cross : Vector3 = up.cross(normal).normalized()
+	var forward = normal * cos(difference) + cross.cross(normal) * sin(difference)\
+	+ cross * cross.dot(normal) * (1 - cos(difference))
+	return forward

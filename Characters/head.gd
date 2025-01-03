@@ -3,7 +3,8 @@ extends Node3D
 var mouse_sensitivity = 0.15
 
 @onready var head_free_space_cast = $HeadFreeSpaceCast
-@onready var camera = $Camera
+@onready var camera = $RemoteCamera
+@onready var actual_camera = %Camera
 @export var fov : float = 75
 
 var do_rotate_owner : bool = true
@@ -25,7 +26,7 @@ func _physics_process(delta):
 	camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 	
 	var total_fov = fov + (fov * owner.add_speed_ratio) / 5
-	camera.fov = lerp(camera.fov, total_fov, delta * 30)
+	actual_camera.fov = lerp(actual_camera.fov, total_fov, delta * 30)
 
 func head_free_space() -> bool:
 	head_free_space_cast.force_shapecast_update()

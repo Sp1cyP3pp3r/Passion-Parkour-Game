@@ -9,6 +9,7 @@ var orig_position : Vector3
 
 func _ready() -> void:
 	change_res()
+	visible = true
 	orig_position = camera.global_position
 
 func change_res(x = get_viewport().size.x, y = get_viewport().size.y):
@@ -17,4 +18,4 @@ func change_res(x = get_viewport().size.x, y = get_viewport().size.y):
 func _process(delta: float) -> void:
 	camera.global_position = orig_position + player.head.camera.global_position / world_scale
 	camera.global_basis = player.head.camera.global_basis
-	camera.fov = player.head.camera.fov
+	camera.fov = player.head.actual_camera.fov

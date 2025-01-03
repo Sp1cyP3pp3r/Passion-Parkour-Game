@@ -11,6 +11,7 @@ extends Node3D
 
 
 var current_position : Vector3
+var current_normal : Vector3
 var init_position : Vector3
 
 signal update_ledge(point : Vector3)
@@ -74,12 +75,11 @@ func is_obstacle()  -> bool:
 	current_normal = obstacle_detector.get_collision_normal(0)
 	return true
 
-var current_normal : Vector3
 
 func can_grab_ledge() -> bool:
-	obstacle_obstr.global_position.y = get_mantle_point().y + 0.03
+	obstacle_obstr.global_position.y = get_mantle_point().y + 0.031
 	#obstacle_obstr.global_basis.z = current_normal
-	obstacle_obstr.force_raycast_update()
+	#obstacle_obstr.force_raycast_update()
 	if obstacle_obstr.is_colliding():
 		return false
 	return true

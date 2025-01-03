@@ -23,3 +23,4 @@ func _physics_process(delta):
 	 + " " + str(snapped(speed, 0.1)) + " " + str(snapped(add_speed_ratio, 0.01)) + "\n" + str(snapped(velocity.y, 0.1))
 	
 	$CanvasLayer/Label.text = str(debug_letters) + "/10"
+	

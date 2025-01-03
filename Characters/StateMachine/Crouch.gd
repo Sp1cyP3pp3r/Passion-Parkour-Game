@@ -25,6 +25,7 @@ func on_physics_process(delta):
 	handle_quickturn()
 	smooth_landing(delta)
 	handle_uncrouch()
+	handle_slope()
 
 
 # Called when the state machine exits this state.

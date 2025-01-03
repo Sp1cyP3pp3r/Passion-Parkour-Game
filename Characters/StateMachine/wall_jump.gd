@@ -23,23 +23,6 @@ func on_physics_process(delta):
 	if player.is_on_floor():
 		change_state("Air")
 
-
-func handle_wallrun():
-	var _vel = player.velocity
-	_vel.y = 0
-	var _len = _vel.length()
-	if player.body.is_on_wall():
-		# horizontal wallrun
-		var _dot = player.body.get_wall_dot()
-		if _dot:
-			if _dot <= -0.1 and _dot >= -0.85:
-				if player.body.is_upper_head_colliding():
-					change_state("Wallrun")
-			# vertical wallrun
-			elif _dot <= -0.85 and _dot >= -1:
-				if player.climb.is_wall():
-					change_state("UpWallrun")
-
 # Called when the state machine exits this state.
 func on_exit():
 	pass

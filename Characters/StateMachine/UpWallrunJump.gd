@@ -27,22 +27,6 @@ func on_physics_process(delta):
 func on_exit():
 	pass
 
-func handle_wallrun():
-	var _vel = player.velocity
-	_vel.y = 0
-	var _len = _vel.length()
-	if player.body.is_on_wall():
-		# horizontal wallrun
-		var _dot = player.body.get_wall_dot()
-		if _dot:
-			if _dot <= -0.1 and _dot >= -0.85:
-				if player.body.is_upper_head_colliding():
-					change_state("Wallrun")
-			# vertical wallrun
-			elif _dot <= -0.85 and _dot >= -1:
-				if player.climb.is_wall():
-					change_state("UpWallrun")
-
 #func handle_climbing():
 	#var _height = player.climb.get_obstacle_height()
 	#

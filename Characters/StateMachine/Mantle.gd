@@ -18,7 +18,7 @@ func no_tilt():
 	var _tilt_time = 0.3
 	var height = player.global_position.y - mantle_point.y
 	var _tilt
-	cam_tilt.tween_property(%Camera, "rotation_degrees:z", height, _tilt_time)
+	cam_tilt.tween_property(%RemoteCamera, "rotation_degrees:z", height, _tilt_time)
 	await cam_tilt.finished
 	cam_tilt.kill()
 	
@@ -32,11 +32,11 @@ func mantle_tween():
 	tween.play()
 	var _to = 0
 	var _cam_time = 0.3412
-	cam_straight.tween_property(%Camera, "rotation:x", _to, _cam_time)
+	cam_straight.tween_property(%RemoteCamera, "rotation:x", _to, _cam_time)
 	cam_straight.play()
 	var _tilt = -9.53
 	var _tilt_time = 0.3
-	cam_tilt.tween_property(%Camera, "rotation_degrees:z", _tilt, _tilt_time)
+	cam_tilt.tween_property(%RemoteCamera, "rotation_degrees:z", _tilt, _tilt_time)
 	cam_tilt.play()
 	await tween.finished
 	tween.kill()

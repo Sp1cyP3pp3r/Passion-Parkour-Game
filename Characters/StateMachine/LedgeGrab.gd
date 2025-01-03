@@ -53,11 +53,11 @@ func body_tween():
 
 func cam_tween():
 	var tween = create_tween()
-	var _from : Vector3 = %Camera.global_position + -%Camera.global_basis.z
+	var _from : Vector3 = %RemoteCamera.global_position + -%RemoteCamera.global_basis.z
 	var _to : Vector3 = owner.global_position + -owner.global_basis.z
 	_to.y = ledge_point.y + 1
 	var time = 0.08 # 10 * _to.angle_to(_from)
-	tween.tween_method(Callable(%Camera, "look_at"), _from, _to, time)
+	tween.tween_method(Callable(%RemoteCamera, "look_at"), _from, _to, time)
 	no_action = true
 	tween.play()
 	await tween.finished

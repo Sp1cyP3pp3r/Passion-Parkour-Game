@@ -118,28 +118,25 @@ func handle_uncrouch() -> void:
 	if Global.crouch_toggle:
 		if Input.is_action_just_pressed("uncrouch"):
 			if player.head.head_free_space():
-				change_state("Run")
+				change_state("Idle")
 				
 	else:
 		if not Input.is_action_pressed("crouch"):
 			if player.head.head_free_space():
-				change_state("Run")
-
-var can_grab_ledge : bool = true
+				change_state("Idle")
 
 func handle_ledgegrab() -> void:
-	if can_grab_ledge:
-		if player.velocity.y >= -20:
-			if player.climb.is_obstacle():
-				if player.climb.can_grab_ledge():
-					if player.climb.get_obstacle_height() >= 2.2 and\
-					player.climb.get_obstacle_height() <= 3:
-						player.climb.can_mantle()
-						change_state("LedgeGrab")
-					elif player.climb.get_obstacle_height() >= 1 and\
-					player.climb.get_obstacle_height() <= 2.19:
-						if player.climb.can_mantle():
-							change_state("Mantle")
+	if player.velocity.y >= -20:
+		if player.climb.is_obstacle():
+			if player.climb.can_grab_ledge():
+				if player.climb.get_obstacle_height() >= 2.18 and\
+				player.climb.get_obstacle_height() <= 3.1:
+					player.climb.can_mantle()
+					change_state("LedgeGrab")
+				elif player.climb.get_obstacle_height() >= 0.8 and\
+				player.climb.get_obstacle_height() <= 2.17:
+					if player.climb.can_mantle():
+						change_state("Mantle")
 
 var is_quickturning : bool = false
 func handle_quickturn() -> void:
@@ -157,3 +154,26 @@ func handle_quickturn() -> void:
 		is_quickturning = false
 		tween.kill()
 	
+
+func handle_wallrun():
+	#var _vel = player.velocity
+	#_vel.y = 0
+	#var _len = _vel.length()
+	if player.body.is_on_wall():
+		# horizontal wallrun
+		var _dot = player.body.get_wall_dot()
+		if _dot != -999:
+			if $"../Wallrun".previous_wall == player.body.get_wall_normal():
+				return
+			if _dot <= -0.05 and _dot >= -0.85:
+				if player.body.is_upper_head_colliding():
+					change_state("Wallrun")
+			# vertical wallrun
+			elif _dot <= -0.85 and _dot >= -1:
+				if player.climb.is_wall():
+					change_state("UpWallrun")
+
+func handle_slope():
+	var _dot = player.legs.get_floor_dot()
+	if _dot < 0.75:
+		change_state("Slide")

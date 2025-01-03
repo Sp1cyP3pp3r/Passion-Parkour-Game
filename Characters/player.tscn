@@ -1,26 +1,27 @@
-[gd_scene load_steps=47 format=3 uid="uid://c1n8xrti8afpc"]
+[gd_scene load_steps=48 format=3 uid="uid://c1n8xrti8afpc"]
 
-[ext_resource type="Script" path="res://Characters/player.gd" id="1_oa43o"]
-[ext_resource type="Script" path="res://addons/finite_state_machine/scripts/finite_state_machine.gd" id="2_p4q1k"]
-[ext_resource type="Shader" path="res://TestStuff/Shaders/outline.gdshader" id="3_ibds6"]
-[ext_resource type="Script" path="res://Characters/head.gd" id="3_kj3jh"]
-[ext_resource type="Script" path="res://Characters/body.gd" id="3_kv3lp"]
-[ext_resource type="Script" path="res://Characters/legs.gd" id="3_sof65"]
-[ext_resource type="Script" path="res://Characters/Climb.gd" id="4_2ehjw"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Idle.gd" id="5_6pvtv"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Run.gd" id="6_q5vx6"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Air.gd" id="7_q0tn7"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Jump.gd" id="8_856fg"]
+[ext_resource type="Script" uid="uid://bk5xpwq60mxaw" path="res://Characters/player.gd" id="1_oa43o"]
+[ext_resource type="Script" uid="uid://cnmr3wheqypja" path="res://addons/finite_state_machine/scripts/finite_state_machine.gd" id="2_p4q1k"]
+[ext_resource type="Shader" uid="uid://c43e2atig5sfd" path="res://TestStuff/Shaders/outline.gdshader" id="3_ibds6"]
+[ext_resource type="Script" uid="uid://1di8g1bycqx7" path="res://Characters/head.gd" id="3_kj3jh"]
+[ext_resource type="Script" uid="uid://01t6ahuof33w" path="res://Characters/body.gd" id="3_kv3lp"]
+[ext_resource type="Script" uid="uid://h8nb0dknwxhv" path="res://Characters/legs.gd" id="3_sof65"]
+[ext_resource type="Script" uid="uid://bybsv3jitei88" path="res://Characters/Climb.gd" id="4_2ehjw"]
+[ext_resource type="Script" uid="uid://bu5ycqc3jrvcy" path="res://Characters/StateMachine/Idle.gd" id="5_6pvtv"]
+[ext_resource type="Script" uid="uid://ns4o7plsvfph" path="res://Characters/StateMachine/Run.gd" id="6_q5vx6"]
+[ext_resource type="Script" uid="uid://d14nv3b25luq6" path="res://Characters/StateMachine/Air.gd" id="7_q0tn7"]
+[ext_resource type="Script" uid="uid://ctkh8koxf1xrc" path="res://Characters/StateMachine/Jump.gd" id="8_856fg"]
 [ext_resource type="Curve" uid="uid://cv4u1kjdyu52w" path="res://Characters/run_curve.tres" id="8_iqy3b"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Crouch.gd" id="9_84rn1"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Slide.gd" id="10_d4xg0"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Wallrun.gd" id="11_5sljj"]
-[ext_resource type="Script" path="res://Characters/StateMachine/UpWallrun.gd" id="13_47a8u"]
-[ext_resource type="Script" path="res://Characters/StateMachine/LedgeGrab.gd" id="17_qy47v"]
-[ext_resource type="Script" path="res://Characters/StateMachine/Mantle.gd" id="18_433q2"]
-[ext_resource type="Script" path="res://Characters/StateMachine/UpWallrunJump.gd" id="19_h3pa0"]
-[ext_resource type="Script" path="res://Characters/StateMachine/player_state.gd" id="20_ibds6"]
-[ext_resource type="Script" path="res://Characters/StateMachine/wall_jump.gd" id="21_ibds6"]
+[ext_resource type="Script" uid="uid://b5i68exdxmt1a" path="res://Characters/StateMachine/Crouch.gd" id="9_84rn1"]
+[ext_resource type="Script" uid="uid://ctlngoj5bvi3i" path="res://Characters/StateMachine/Slide.gd" id="10_d4xg0"]
+[ext_resource type="Script" uid="uid://bcvel2nki6lv7" path="res://Characters/StateMachine/Wallrun.gd" id="11_5sljj"]
+[ext_resource type="Script" uid="uid://bgq23j57a5lpx" path="res://Characters/StateMachine/UpWallrun.gd" id="13_47a8u"]
+[ext_resource type="Script" uid="uid://c1misojvmpngf" path="res://Characters/StateMachine/LedgeGrab.gd" id="17_qy47v"]
+[ext_resource type="Script" uid="uid://bc3nhvbvrolye" path="res://Characters/StateMachine/Mantle.gd" id="18_433q2"]
+[ext_resource type="Script" uid="uid://bvx4uegmo80y1" path="res://Characters/StateMachine/UpWallrunJump.gd" id="19_h3pa0"]
+[ext_resource type="Script" uid="uid://ot381nyq2jup" path="res://Characters/StateMachine/player_state.gd" id="20_ibds6"]
+[ext_resource type="Script" uid="uid://b7ssktn521xd" path="res://Characters/StateMachine/wall_jump.gd" id="21_ibds6"]
+[ext_resource type="Script" uid="uid://1tmh1xw8whsn" path="res://Characters/StateMachine/fly.gd" id="22_aw3oq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oyfeb"]
 radius = 0.25
@@ -44,7 +45,7 @@ ground_horizon_color = Color(0.897279, 0.571209, 0.471812, 1)
 sky_material = SubResource("ProceduralSkyMaterial_cvve5")
 
 [sub_resource type="Environment" id="Environment_ibds6"]
-background_mode = 3
+background_mode = 2
 background_canvas_max_layer = 1
 sky = SubResource("Sky_3e6v0")
 tonemap_mode = 2
@@ -104,8 +105,9 @@ height = 0.8
 radius = 0.45
 
 [sub_resource type="Curve" id="Curve_rnlko"]
-_data = [Vector2(0, 0), 0.0, 0.657192, 0, 0, Vector2(1, 1), 2.52526, 0.0, 0, 0]
-point_count = 2
+_limits = [0.0, 2.5, 0.0, 2.0]
+_data = [Vector2(0, 0), 0.0, 0.657192, 0, 0, Vector2(1, 1), 1.07088, 1.07088, 0, 0, Vector2(2, 2.5), 0.829329, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_52wli"]
 _data = [Vector2(0, 0), 0.0, 2.43212, 0, 0, Vector2(1, 1), 0.148289, 0.0, 0, 0]
@@ -159,6 +161,7 @@ disabled = true
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 script = ExtResource("3_kj3jh")
+fov = 90.0
 
 [node name="HeadFreeSpaceCast" type="ShapeCast3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.250672, 0)
@@ -166,23 +169,42 @@ enabled = false
 shape = SubResource("CylinderShape3D_rdl2t")
 target_position = Vector3(0, 0.45, 0)
 
-[node name="Camera" type="Camera3D" parent="Head"]
+[node name="RemoteCamera" type="RemoteTransform3D" parent="Head"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.201497, 0)
+remote_path = NodePath("../CanvasLayer/SubViewportContainer/SubViewport/Camera")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Head"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Head/CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Head/CanvasLayer/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="Head/CanvasLayer/SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 cull_mask = 1048573
 environment = SubResource("Environment_ibds6")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Camera"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/CanvasLayer/SubViewportContainer/SubViewport/Camera"]
 mesh = SubResource("QuadMesh_h3pa0")
 
 [node name="Climb" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-visible = false
 script = ExtResource("4_2ehjw")
 
 [node name="ObstacleHeight" type="RayCast3D" parent="Climb"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.851986, -0.365159)
-target_position = Vector3(0, -2, 0)
+target_position = Vector3(0, -2.125, 0)
 debug_shape_custom_color = Color(0, 0.94902, 0, 1)
 
 [node name="ObstacleObstr" type="RayCast3D" parent="Climb"]
@@ -241,7 +263,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47, 0)
 target_position = Vector3(0.5, 0, 0)
 
 [node name="Legs" type="Node3D" parent="."]
-visible = false
 script = ExtResource("3_sof65")
 
 [node name="FloorCast" type="ShapeCast3D" parent="Legs"]
@@ -251,8 +272,8 @@ shape = SubResource("CapsuleShape3D_5qlqq")
 target_position = Vector3(0, -0.68, 0)
 
 [node name="FloorRay" type="RayCast3D" parent="Legs/FloorCast"]
-enabled = false
-target_position = Vector3(0, -0.45, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.243849, 0)
+target_position = Vector3(0, -0.8, 0)
 
 [node name="StairsCast" type="ShapeCast3D" parent="Legs"]
 transform = Transform3D(0.999996, 0, -0.00274016, 0, 1, 0, 0.00274016, 0, 0.999996, 0, 0.281829, 0)
@@ -387,9 +408,12 @@ metadata/_custom_type_script = ExtResource("20_ibds6")
 script = ExtResource("21_ibds6")
 metadata/_custom_type_script = ExtResource("20_ibds6")
 
+[node name="Fly" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("22_aw3oq")
+metadata/_custom_type_script = ExtResource("20_ibds6")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 2
-visible = false
 follow_viewport_enabled = true
 
 [node name="Label2" type="Label" parent="CanvasLayer"]

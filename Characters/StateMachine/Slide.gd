@@ -26,15 +26,9 @@ func on_enter():
 
 # Called every physics frame when this state is active.
 func on_physics_process(delta):
-	flow_speed(delta)
+	slope(delta)
 	handle_no_floor()
 	slopes_and_stairs(delta)
-	if do_uncrouch:
-		handle_uncrouch()
-	if snapped(player.add_speed_ratio, 0.01) <= 0.0:
-		crouch_node.is_crouching = true
-		to_crouch = true
-		change_state("Crouch")
 
 
 # Called when the state machine exits this state.
@@ -52,12 +46,52 @@ var _i : float = 0
 @export var _curve : Curve
 func flow_speed(delta) -> void:
 	_i += delta / 5
+	_i = clamp(_i, 0, 1)
 	var _value = 1 - _curve.sample(_i)
 	player.add_speed_ratio = player.add_speed_ratio * _value
 	handle_movement(delta)
-	#player.velocity = player.velocity * _value
-	#player.move_and_slide()
 
 var do_uncrouch := false
 func _on_enter_state_timeout() -> void:
 	do_uncrouch = true
+
+
+func slope(delta):
+	var _dot = player.legs.get_floor_dot()
+	if _dot < 0.9:
+		_i += delta / 2
+		var _value = _curve.sample(_i)
+		player.add_speed_ratio = _value
+		
+		var direction = player.legs.get_floor_forward()
+		var additional_speed = player.speed * accel_curve.sample(player.add_speed_ratio) / 2 * 1.2
+		var total_speed = player.speed + additional_speed
+		player.velocity.x = lerp(player.velocity.x, direction.x * total_speed, player.acceleration * delta)
+		player.velocity.z = lerp(player.velocity.z, direction.z * total_speed, player.acceleration * delta)
+		player.move_and_slide()
+		
+		handle_jump()
+		
+	else:
+		flow_speed(delta)
+		if snapped(player.add_speed_ratio, 0.01) <= 0.0:
+			crouch_node.is_crouching = true
+			to_crouch = true
+			change_state("Crouch")
+		if do_uncrouch:
+			handle_uncrouch()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

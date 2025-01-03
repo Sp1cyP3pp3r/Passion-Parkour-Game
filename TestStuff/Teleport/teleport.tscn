@@ -8,6 +8,8 @@ var reset_point : Vector3
 @export var player : Node3D
 
 func _ready():
+	if not player:
+		player = get_parent()
 	global_position = player.global_position
 	Teleport_Point = global_position
 	reset_point = global_position
@@ -16,11 +18,6 @@ func _physics_process(delta):
 	if Input.is_key_pressed(KEY_F):
 		move_teleport(player.global_position)
 	if Input.is_key_pressed(KEY_E):
-		player.global_rotation.y = player.head.camera.global_rotation.y
-		player.head.camera.rotation.y = 0
-		player.head.do_rotate_owner = true
-		player.velocity = Vector3.ZERO
-		player.state_machine.current_state.change_state(\"Idle\")
 		begin_teleport(Teleport_Point)
 	if  Input.is_key_pressed(KEY_T):
 		move_teleport(reset_point)
@@ -44,6 +41,12 @@ func move_teleport(_position : Vector3):
 	
 
 func begin_teleport(_position : Vector3):
+	player.global_rotation.y = player.head.camera.global_rotation.y
+	player.head.camera.rotation.y = 0
+	player.head.do_rotate_owner = true
+	player.velocity = Vector3.ZERO
+	player.state_machine.current_state.change_state(\"Idle\")
+	
 	var tween = create_tween()
 	var time : float = _position.distance_to(player.global_position) / 100
 	time = clamp(time, 0, 1000)
@@ -88,14 +91,12 @@ sections = 11
 curve = SubResource("Curve_vkkoi")
 
 [sub_resource type="Curve" id="Curve_7b7ww"]
-min_value = -360.0
-max_value = 360.0
+_limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0.00717703, -205.132), 0.0, 0.0, 0, 0, Vector2(0.337321, 175.245), 0.0, 0.0, 0, 0, Vector2(0.705742, -150.792), 0.0, 0.0, 0, 0, Vector2(0.997608, 153.509), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="Curve" id="Curve_hghcd"]
-min_value = -200.0
-max_value = 200.0
+_limits = [-200.0, 200.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.270335, -101.887), 0.0, 0.0, 0, 0, Vector2(0.834928, 91.3208), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
@@ -104,7 +105,7 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.919271, 0.909434), 0.0, 0.0, 0
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_m4kio"]
-min_value = -1.0
+_limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.351675, -0.0867925), 0.0, 0.0, 0, 0, Vector2(0.782297, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 

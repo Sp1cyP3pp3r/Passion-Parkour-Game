@@ -21,13 +21,15 @@ func on_enter():
 			can_grab_ledge = false
 			$IgnoreLedges.start()
 
+var can_grab_ledge : bool = true
 # Called every physics frame when this state is active.
 func on_physics_process(delta):
 	handle_fall(delta)
 	handle_landing()
 	handle_movement(delta)
 	handle_jump()
-	handle_ledgegrab()
+	if can_grab_ledge:
+		handle_ledgegrab()
 	
 	if Input.is_action_just_pressed("jump"):
 		if can_walljump_in_this_state:

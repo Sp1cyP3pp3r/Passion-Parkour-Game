@@ -6,6 +6,7 @@ func on_enter():
 	player.acceleration = 15.0
 	player.global_rotation.y = player.head.camera.global_rotation.y
 	player.head.camera.rotation.y = 0
+	$"../Wallrun".previous_wall = Vector3.ZERO
 	
 
 # Called every physics frame when this state is active.
@@ -16,6 +17,7 @@ func on_physics_process(delta):
 	handle_jump()
 	handle_crouch()
 	handle_quickturn()
+	handle_slope()
 	if Input.is_action_just_pressed("jump"):
 		handle_ledgegrab()
 	
@@ -24,6 +26,9 @@ func on_physics_process(delta):
 	player.velocity.z = lerp(player.velocity.z, 0 * player.speed, player.acceleration * delta)
 	player.move_and_slide()
 	catch_movement()
+	
+	if Input.is_action_just_pressed("noclip"):
+		change_state("Fly")
 
 
 # Called when the state machine exits this state.

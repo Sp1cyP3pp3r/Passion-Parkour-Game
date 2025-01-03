@@ -10,6 +10,7 @@ func on_enter():
 	player.acceleration = 30
 	previous_yaw = -player.global_basis.z
 	i = 0
+	$"../Wallrun".previous_wall = Vector3.ZERO
 
 func on_physics_process(delta):
 	player.add_speed_ratio += delta / 5
@@ -33,6 +34,7 @@ func on_physics_process(delta):
 	handle_jump()
 	camera_yaw()
 	handle_quickturn()
+	handle_slope()
 	if Input.is_action_just_pressed("jump"):
 		handle_ledgegrab()
 	

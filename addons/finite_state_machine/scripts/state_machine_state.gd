@@ -73,5 +73,3 @@ func change_state(state_name: String) -> void:
 # Checks if this state is the current one.
 func is_current_state() -> bool:
 	return is_instance_valid(state_machine) and state_machine.current_state == self
-
-

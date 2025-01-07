@@ -28,7 +28,7 @@ var queue_turn := false
 
 func on_physics_process(delta):
 	player.move_and_slide()
-	handle_ledgegrab()
+	_handle_ledgegrab()
 	
 	i = i - delta / 2
 	var sample = up_curve.sample(i)
@@ -73,11 +73,30 @@ func on_physics_process(delta):
 	if player.is_on_floor():
 		change_state("Air")
 
+
+func _handle_ledgegrab() -> void:
+	if player.velocity.y >= -20:
+		if player.climb.is_obstacle():
+			if player.climb.can_grab_ledge():
+				if player.climb.get_obstacle_height() >= 2.18 and\
+				player.climb.get_obstacle_height() <= 3.1:
+					player.climb.can_mantle()
+					change_state("LedgeGrab")
+					next_state_ledge = true
+				elif player.climb.get_obstacle_height() >= 0.8 and\
+				player.climb.get_obstacle_height() <= 2.17:
+					if player.climb.can_mantle():
+						change_state("Mantle")
+						next_state_ledge = false
+
+var next_state_ledge : bool
 func on_exit():
 	if not QT:
-		cam_tween_end()
+		if not next_state_ledge:
+			cam_tween_end()
 	player.head.do_rotate = true
 	player.add_speed_ratio = 0
+	next_state_ledge = false
 	$WallTimer.stop()
 	$TurnTimer.stop()
 	$CoyoteTimer.stop()
@@ -101,7 +120,7 @@ func cam_tween():
 func cam_tween_end():
 	var tween = create_tween()
 	var _to = 0
-	var time = 0.28
+	var time = 0.25
 	tween.tween_property(%RemoteCamera, "rotation:x", _to, time)
 	tween.play()
 	await tween.finished

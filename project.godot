@@ -20,6 +20,12 @@ config/icon="res://icon.svg"
 
 Global="*res://Characters/global.tscn"
 
+[display]
+
+window/size/viewport_width=1106
+window/size/viewport_height=622
+window/size/borderless=true
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/finite_state_machine/plugin.cfg", "res://addons/func_godot/plugin.cfg", "res://addons/post_processing/plugin.cfg")
@@ -105,7 +111,4 @@ exit={
 [physics]
 
 3d/physics_engine="GodotPhysics3D"
-
-[rendering]
-
-occlusion_culling/use_occlusion_culling=true
+common/physics_interpolation=true

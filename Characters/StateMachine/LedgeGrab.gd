@@ -8,7 +8,8 @@ func on_enter():
 	player.velocity.y = 0
 	player.head.do_rotate_owner = false
 	player.add_speed_ratio = 0
-	cam_tween()
+	$CamTimer.start()
+	#cam_tween()
 	body_tween()
 
 # Called every physics frame when this state is active.

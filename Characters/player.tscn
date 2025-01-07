@@ -139,6 +139,7 @@ font_size = 42
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("legs", "head", "body", "climb")]
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_oa43o")
 legs = NodePath("Legs")
 head = NodePath("Head")
@@ -186,7 +187,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="Head/CanvasLayer/SubViewportContainer"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(1152, 648)
+size = Vector2i(1106, 622)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera3D" parent="Head/CanvasLayer/SubViewportContainer/SubViewport"]
@@ -205,11 +206,13 @@ script = ExtResource("4_2ehjw")
 [node name="ObstacleHeight" type="RayCast3D" parent="Climb"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.851986, -0.365159)
 target_position = Vector3(0, -2.125, 0)
+collision_mask = 5
 debug_shape_custom_color = Color(0, 0.94902, 0, 1)
 
 [node name="ObstacleObstr" type="RayCast3D" parent="Climb"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.162644, 0.0652389)
 target_position = Vector3(0, 0, -0.8)
+collision_mask = 5
 debug_shape_custom_color = Color(0, 0.94902, 0, 1)
 
 [node name="ObstacleDetector" type="ShapeCast3D" parent="Climb"]
@@ -217,6 +220,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.162644, -0.248098)
 shape = SubResource("BoxShape3D_ckefi")
 target_position = Vector3(0, 0, -0.3)
 margin = 0.01
+collision_mask = 5
 debug_shape_custom_color = Color(0.146232, 0.90059, 3.46541e-06, 1)
 
 [node name="MantleThrough" type="ShapeCast3D" parent="Climb"]
@@ -231,11 +235,13 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.8
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.17233e-07, -0.951835)
 shape = SubResource("CapsuleShape3D_71r1b")
 target_position = Vector3(0, 0, 0)
+collision_mask = 5
 
 [node name="CrouchFreeSpace" type="ShapeCast3D" parent="Climb/MantleContainer"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.57628e-07, -0.376832)
 shape = SubResource("CapsuleShape3D_rxkpe")
 target_position = Vector3(0, 0, 0)
+collision_mask = 5
 
 [node name="Body" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00055, 0)
@@ -360,6 +366,7 @@ wall_curve = SubResource("Curve_lin1y")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_ibds6")
 target_position = Vector3(0, 0, -0.5)
+collision_mask = 5
 
 [node name="NoWallTimer" type="Timer" parent="FiniteStateMachine/Wallrun/NoWall"]
 process_callback = 0
@@ -394,6 +401,11 @@ one_shot = true
 [node name="LedgeGrab" type="Node" parent="FiniteStateMachine"]
 script = ExtResource("17_qy47v")
 
+[node name="CamTimer" type="Timer" parent="FiniteStateMachine/LedgeGrab"]
+process_callback = 0
+wait_time = 0.05
+one_shot = true
+
 [node name="Mantle" type="Node" parent="FiniteStateMachine"]
 unique_name_in_owner = true
 script = ExtResource("18_433q2")
@@ -418,10 +430,15 @@ follow_viewport_enabled = true
 
 [node name="Label2" type="Label" parent="CanvasLayer"]
 unique_name_in_owner = true
-offset_left = 77.0
-offset_top = 505.0
-offset_right = 216.0
-offset_bottom = 575.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 61.0
+offset_top = 491.0
+offset_right = -775.0
+offset_bottom = -61.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "NTRCN TRNMCG"
 label_settings = SubResource("LabelSettings_mm6q2")
 horizontal_alignment = 2
@@ -441,10 +458,15 @@ horizontal_alignment = 2
 [node name="Label4" type="Label" parent="CanvasLayer"]
 unique_name_in_owner = true
 light_mask = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 586.0
 offset_top = 505.0
-offset_right = 1117.0
-offset_bottom = 575.0
+offset_right = -12.0
+offset_bottom = -47.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "NTRCN TRNMCG"
 label_settings = SubResource("LabelSettings_f0lxb")
 horizontal_alignment = 2
@@ -452,20 +474,30 @@ horizontal_alignment = 2
 [node name="Label5" type="Label" parent="CanvasLayer"]
 unique_name_in_owner = true
 light_mask = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 592.0
-offset_top = 421.0
-offset_right = 1123.0
-offset_bottom = 491.0
+offset_top = 415.0
+offset_right = -10.0
+offset_bottom = -124.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "gay hotdog
 "
 label_settings = SubResource("LabelSettings_f0lxb")
 horizontal_alignment = 2
 
 [node name="Label" type="Label" parent="CanvasLayer"]
-offset_left = 82.0
-offset_top = 54.0
-offset_right = 170.0
-offset_bottom = 112.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 68.0
+offset_top = 52.0
+offset_right = -950.0
+offset_bottom = -451.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "0/10
 "
 label_settings = SubResource("LabelSettings_x328j")
@@ -481,3 +513,4 @@ label_settings = SubResource("LabelSettings_x328j")
 [connection signal="timeout" from="FiniteStateMachine/UpWallrun/WallTimer" to="FiniteStateMachine/UpWallrun" method="_on_walltimer_timeout"]
 [connection signal="timeout" from="FiniteStateMachine/UpWallrun/TurnTimer" to="FiniteStateMachine/UpWallrun" method="_on_timer_timeout"]
 [connection signal="timeout" from="FiniteStateMachine/UpWallrun/CoyoteTimer" to="FiniteStateMachine/UpWallrun" method="_on_timer_timeout"]
+[connection signal="timeout" from="FiniteStateMachine/LedgeGrab/CamTimer" to="FiniteStateMachine/LedgeGrab" method="cam_tween"]

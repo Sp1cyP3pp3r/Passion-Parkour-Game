@@ -1,13 +1,14 @@
-[gd_scene load_steps=8 format=4 uid="uid://cikwkavypqcss"]
+[gd_scene load_steps=10 format=4 uid="uid://cikwkavypqcss"]
+
+[ext_resource type="Texture2D" uid="uid://blsndhoq2sjba" path="res://Textures/Kenney/Red/texture_11.png" id="1_fa5yp"]
+[ext_resource type="Script" uid="uid://c14htnfxoqe2n" path="res://TestStuff/Ball/ball.gd" id="1_x6oxy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ge10y"]
-friction = 0.38
-bounce = 0.89
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_u1ol3"]
+friction = 0.5
+bounce = 0.8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_62rs6"]
-albedo_texture = SubResource("CompressedTexture2D_u1ol3")
+albedo_texture = ExtResource("1_fa5yp")
 
 [sub_resource type="SphereMesh" id="SphereMesh_jh1b6"]
 
@@ -29,10 +30,14 @@ _surfaces = [{
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_50m5t"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_x6oxy"]
+radius = 0.597493
+
 [node name="Ball" type="RigidBody3D"]
-collision_layer = 4
-collision_mask = 7
+collision_layer = 8
+collision_mask = 15
 physics_material_override = SubResource("PhysicsMaterial_ge10y")
+script = ExtResource("1_x6oxy")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_62rs6")
@@ -44,3 +49,12 @@ mesh = SubResource("ArrayMesh_q73cy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_50m5t")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_x6oxy")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_body_entered"]
